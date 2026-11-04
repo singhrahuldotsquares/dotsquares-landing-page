@@ -1,0 +1,557 @@
+/* ==========================================================================
+   Partners & Awards
+   Built from the live reference (dotsquares.com/lp/hubspot-solutions-partner):
+   1350px container · two 631px columns · 20px radius panels ·
+   Partnerships / Awards toggle · rating cards · square achievements slider ·
+   award-logo marquee.
+   ========================================================================== */
+
+.awards {
+  --awards-ink: #0f172a;
+  --awards-muted: #64748b;
+  --awards-accent: #ff7a1a;
+  --awards-line: rgba(15, 23, 42, 0.06);
+  --awards-shadow: 0 10px 40px rgba(15, 23, 42, 0.04);
+
+  position: relative;
+  padding: 80px 0;
+  overflow: hidden;
+  background: #f8f6f3;
+}
+
+.awards__blur {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.awards__blur-1,
+.awards__blur-2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  opacity: 0.2;
+}
+
+.awards__blur-1 {
+  top: -140px;
+  left: -120px;
+  width: 320px;
+  height: 320px;
+  background: rgba(255, 122, 26, 0.12);
+}
+
+.awards__blur-2 {
+  right: -120px;
+  bottom: -140px;
+  width: 300px;
+  height: 300px;
+  background: rgba(124, 58, 237, 0.1);
+}
+
+.awards__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1350px;
+  margin-inline: auto;
+  padding-inline: 32px;
+}
+
+.awards__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* --------------------------------------------------------------------------
+   Left card: heading, copy, "Awards" label, award collage
+   -------------------------------------------------------------------------- */
+.awards__card {
+  min-width: 0;
+  padding: 32px;
+  border: 1px solid var(--awards-line);
+  border-radius: 20px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--awards-accent) 8%, #fff) 0%, #fff 100%);
+  box-shadow: var(--awards-shadow);
+}
+
+.awards__eyebrow {
+  margin-bottom: 20px;
+  color: var(--awards-accent);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.awards__title {
+  margin-bottom: 16px;
+  color: var(--awards-ink);
+  font-family: "Sora", var(--ds-font-sans);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.awards__title span {
+  display: block;
+  margin-top: 8px;
+}
+
+.awards__desc {
+  max-width: 42rem;
+  margin-bottom: 32px;
+  color: var(--awards-muted);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 15px;
+  line-height: 28px;
+}
+
+/* Partnerships / Awards segmented control */
+.awards__tabs {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 4px;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  border-radius: 9999px;
+  background: #f2ede7;
+}
+
+.awards__tab {
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--awards-muted);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.awards__tab:hover {
+  color: var(--awards-ink);
+}
+
+.awards__tab.is-active {
+  background: var(--awards-ink);
+  color: #fff;
+}
+
+.awards__tab:focus-visible {
+  outline: 2px solid var(--awards-accent);
+  outline-offset: 2px;
+}
+
+.awards__logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  background: rgba(255, 255, 255, 0.9);
+  transition: transform 0.5s ease;
+}
+
+.awards__logo img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.awards__logo-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(135deg, rgba(255, 122, 26, 0.06), rgba(124, 58, 237, 0.05));
+  transition: opacity 0.5s ease;
+}
+
+.awards__logo:hover {
+  transform: translateY(-4px);
+}
+
+.awards__logo:hover .awards__logo-glow {
+  opacity: 1;
+}
+
+.awards__logo[hidden] {
+  display: none;
+}
+
+/* Review rating cards */
+.awards__ratings {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin: 0;
+  padding: 16px 0 0;
+  list-style: none;
+}
+
+.awards-rating {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 90px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+}
+
+.awards-rating__name {
+  margin: 0;
+  color: var(--awards-ink);
+  font-family: "Sora", var(--ds-font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 21px;
+}
+
+.awards-rating__name--trustpilot {
+  color: #00b67a;
+}
+
+.awards-rating__logo {
+  display: block;
+  width: auto;
+  height: 20px;
+}
+
+.awards-rating__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.awards-rating__num {
+  color: var(--awards-ink);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+}
+
+.awards-rating__stars {
+  display: flex;
+  flex-shrink: 0;
+  gap: 2px;
+}
+
+.awards-rating__num {
+  flex-shrink: 0;
+}
+
+.awards-rating__stars svg {
+  display: block;
+  flex-shrink: 0;
+  max-width: none; /* base.css caps svg at 100%, which let the stars squash */
+}
+
+.awards-rating__stars--gold { color: #facc15; }
+.awards-rating__stars--orange { color: #fb923c; }
+.awards-rating__stars--trust { color: #00b67a; }
+
+/* --------------------------------------------------------------------------
+   Right column: achievements slider + award-logo marquee
+   -------------------------------------------------------------------------- */
+.awards__right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.achv {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--awards-line);
+  border-radius: 20px;
+  box-shadow: var(--awards-shadow);
+}
+
+.achv__viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.achv__track {
+  display: flex;
+  transition: transform 0.45s ease;
+}
+
+.achv__slide {
+  position: relative;
+  flex: 0 0 100%;
+  min-width: 100%;
+  aspect-ratio: 1;
+}
+
+.achv__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.achv__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.08));
+}
+
+.achv__caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 16px;
+}
+
+.achv__caption h3 {
+  margin-bottom: 8px;
+  color: #fff;
+  font-family: "Sora", var(--ds-font-sans);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 30px;
+}
+
+.achv__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.achv__nav svg {
+  flex-shrink: 0;
+}
+
+.achv__nav--prev {
+  left: 10px;
+}
+
+.achv__nav--next {
+  right: 10px;
+}
+
+.achv__nav:hover {
+  color: #fff;
+  opacity: 0.85;
+}
+
+.achv__nav:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.achv__toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--awards-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Logo marquee (driven by marquee.js) */
+.awards-marquee {
+  position: relative;
+  overflow-x: auto;
+  padding: 20px;
+  border: 1px solid var(--awards-line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  scrollbar-width: none;
+}
+
+.awards-marquee::-webkit-scrollbar {
+  display: none;
+}
+
+.awards-marquee__track {
+  display: flex;
+  width: max-content;
+}
+
+.awards-marquee__group {
+  display: flex;
+  flex-shrink: 0;
+  gap: 16px;
+  padding-right: 16px;
+}
+
+.awards-marquee__item {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 136px;
+  height: 85px;
+  padding: 0 16px;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  transition: transform 0.3s ease;
+}
+
+.awards-marquee__item img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 44px;
+  object-fit: contain;
+}
+
+.awards-marquee__item:hover {
+  transform: translateY(-4px);
+}
+
+.awards-marquee.is-running {
+  overflow: hidden;
+}
+
+.awards-marquee.is-running .awards-marquee__track {
+  animation: awards-marquee var(--marquee-duration, 14s) linear var(--marquee-delay, 0s) infinite;
+}
+
+.awards-marquee.is-running:hover .awards-marquee__track,
+.awards-marquee.is-paused .awards-marquee__track,
+.awards-marquee.is-offscreen .awards-marquee__track {
+  animation-play-state: paused;
+}
+
+.awards-marquee__toggle {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  z-index: 2;
+  padding: 8px 14px;
+  border: 1px solid var(--ds-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--awards-ink);
+  font-size: 13px;
+  font-weight: 600;
+  transform: translateY(-50%);
+}
+
+@keyframes awards-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(var(--marquee-shift, -50%), 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achv__track,
+  .awards__tab,
+  .awards__logo,
+  .awards__logo-glow,
+  .awards-marquee__item {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet & mobile (< 1024): stacked, matching the live site's breakpoint
+   -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .awards {
+    padding: 40px 0;
+  }
+
+  .awards__inner {
+    max-width: 720px;
+    padding-inline: var(--ds-gutter);
+  }
+
+  .awards__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .awards__card {
+    padding: 16px;
+  }
+
+  .awards-marquee__item {
+    width: 216px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .awards__desc,
+  .awards__tabs {
+    margin-bottom: 16px;
+  }
+
+  .awards__tab {
+    padding-inline: 16px;
+    font-size: 15px;
+  }
+
+  .achv__caption h3 {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+@media (max-width: 639.98px) {
+  .awards__title {
+    font-size: 30px;
+  }
+
+  /* Rating cards share each row, as on the live site (three, then one). */
+  .awards__ratings {
+    gap: 12px;
+  }
+
+  .awards-rating {
+    flex: 1 1 0%;
+    width: 50%;
+    min-width: auto;
+  }
+
+  .awards-marquee__item {
+    width: 153px;
+  }
+}

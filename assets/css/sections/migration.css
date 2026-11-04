@@ -1,0 +1,874 @@
+/* ==========================================================================
+   CRM Migration — "From -> To" flow
+
+   Category chips choose the source tools (logo tiles). A short loop then plays
+   the migration story: tools appear -> Mapped -> De-duplicated -> Validated
+   (records tick off inside HubSpot) -> Live in a clean Smart CRM, then moves
+   to the next category. migration.js sets data-step (0-4) on the section and
+   everything below reacts to it. Without JS / with reduced motion the finished
+   state (step 4) is shown.
+   ========================================================================== */
+
+.migration {
+  --mg-orange: var(--ds-orange);
+  --mg-navy: #0e1e36;
+  --mg-line: #eadfd5;
+  --mg-progress: 100%;
+
+  padding: 96px 0 100px;
+  background: var(--ds-white);
+  overflow-x: clip;
+}
+
+.migration__eyebrow {
+  display: flex;
+  width: fit-content;
+  gap: 8px;
+  margin-inline: auto;
+  padding: 7px 18px 7px 12px;
+  border: 1px solid rgba(var(--ds-orange-rgb), 0.28);
+  border-radius: 100px;
+  background: var(--ds-white);
+  box-shadow: 0 8px 20px -10px rgba(var(--ds-orange-rgb), 0.5);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.migration__title {
+  margin-top: 16px;
+}
+
+.migration__intro {
+  max-width: 1085px;
+  margin: 12px auto 0;
+  color: #333;
+  font-size: 17px;
+  line-height: 28px;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Frame
+   -------------------------------------------------------------------------- */
+.mg {
+  margin-top: 40px;
+  padding: 26px 28px 30px;
+  border: 1px solid rgba(var(--ds-orange-rgb), 0.16);
+  border-radius: 34px;
+  background: linear-gradient(150deg, #fff 0%, #fffaf3 58%, #fff0e0 100%);
+  box-shadow: 0 40px 70px -46px rgba(var(--ds-orange-rgb), 0.45);
+}
+
+/* --------------------------------------------------------------------------
+   Category chips
+   -------------------------------------------------------------------------- */
+.mg-cats {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mg-cat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 8px 13px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--mg-navy);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    translate 0.3s var(--ds-ease-out),
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.mg-cat:hover {
+  translate: 0 -3px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.mg-cat:focus-visible {
+  outline: 3px solid var(--ds-orange);
+  outline-offset: 2px;
+}
+
+.mg-cat__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid #ede5e5;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fff 0%, #e8ebff 100%);
+  box-shadow: 0 8px 18px -8px rgba(250, 106, 1, 0.45);
+  transition:
+    transform 0.4s var(--ds-ease-out),
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.mg-cat__icon img {
+  display: block;
+  transition: filter 0.3s ease;
+}
+
+.mg-cat__label {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.mg-cat.is-active {
+  border-color: rgba(var(--ds-orange-rgb), 0.55);
+  background: #fff;
+  box-shadow: 0 18px 32px -22px rgba(var(--ds-orange-rgb), 0.8);
+}
+
+.mg-cat.is-active .mg-cat__icon {
+  transform: scale(1.08);
+  border-color: var(--mg-orange);
+  background: var(--ds-gradient);
+}
+
+.mg-cat.is-active .mg-cat__icon img {
+  filter: brightness(0) invert(1);
+}
+
+/* --------------------------------------------------------------------------
+   Stage: tools -> flow -> HubSpot
+   -------------------------------------------------------------------------- */
+.mg-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) 190px minmax(0, 1fr);
+  align-items: stretch;
+  min-height: 360px;
+  margin-top: 18px;
+  padding: 26px 28px;
+  border: 1px solid rgba(var(--ds-orange-rgb), 0.14);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.mg-stage:focus-visible {
+  outline: 3px solid var(--ds-orange);
+  outline-offset: 4px;
+}
+
+.mg-from {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.mg-zone-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: var(--ds-black);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.mg-zone-title__dot {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--mg-orange);
+  box-shadow: 0 0 0 5px rgba(var(--ds-orange-rgb), 0.16);
+}
+
+.mg-tiles {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  align-content: center;
+  gap: 14px;
+  margin: 16px 0 0;
+  padding: 8px 8px 0 0;
+  list-style: none;
+}
+
+.mg-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1.5;
+  padding: 12px;
+  border: 1px solid var(--mg-line);
+  border-radius: 18px;
+  background: var(--ds-white);
+  box-shadow: 0 14px 26px -20px rgba(var(--ds-navy-rgb), 0.5);
+  transition:
+    border-color 0.5s ease,
+    box-shadow 0.5s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  animation:
+    mg-tile-in 0.55s var(--ds-ease-out) calc(var(--n, 0) * 55ms) both,
+    mg-bob 5s ease-in-out calc(0.8s + var(--n, 0) * 0.3s) infinite;
+}
+
+.mg-tile img {
+  display: block;
+  max-width: 82%;
+  max-height: 60%;
+  object-fit: contain;
+}
+
+/* old set leaves before the new one arrives */
+.mg-tiles.is-out .mg-tile {
+  animation: none;
+  opacity: 0;
+  transform: translateX(-14px);
+}
+
+@keyframes mg-tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.9);
+  }
+}
+
+/* `translate` is separate from the entrance's `transform` */
+@keyframes mg-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -5px;
+  }
+}
+
+/* once the story starts, the tools light up; when validated they get a tick */
+.migration:not([data-step="0"]) .mg-tile {
+  border-color: #fcc9a2;
+}
+
+.migration[data-step="4"] .mg-tile {
+  border-color: #f9a867;
+  box-shadow: 0 16px 28px -18px rgba(var(--ds-orange-rgb), 0.7);
+}
+
+.mg-tile__ok {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--ds-gradient);
+  color: #fff;
+  box-shadow: 0 6px 12px -4px rgba(var(--ds-orange-rgb), 0.8);
+  transform: scale(0);
+  transition: transform 0.45s var(--ds-ease-out) calc(var(--n, 0) * 70ms);
+}
+
+.migration[data-step="3"] .mg-tile__ok,
+.migration[data-step="4"] .mg-tile__ok {
+  transform: scale(1);
+}
+
+/* Flow between the two sides ------------------------------------------------ */
+.mg-flow {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 40px 0 8px;
+  transition: opacity 0.5s ease;
+}
+
+.migration[data-step="0"] .mg-flow {
+  opacity: 0.3;
+}
+
+.mg-flow__line {
+  position: relative;
+  display: block;
+  height: 2px;
+  margin: 0 6px;
+  background: repeating-linear-gradient(90deg, rgba(var(--ds-orange-rgb), 0.6) 0 6px, transparent 6px 11px);
+  background-size: 11px 2px;
+  animation: mg-flow 0.9s linear infinite;
+}
+
+/* arrow head */
+.mg-flow__line::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  right: -4px;
+  border: 6px solid transparent;
+  border-left: 9px solid var(--mg-orange);
+  border-right: 0;
+}
+
+/* a data packet travelling along the line */
+.mg-flow__line::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--mg-orange);
+  box-shadow: 0 0 0 4px rgba(var(--ds-orange-rgb), 0.18), 0 0 14px rgba(var(--ds-orange-rgb), 0.7);
+  animation: mg-packet 2.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+.mg-flow__line:nth-child(2)::before {
+  animation-delay: 0.7s;
+}
+
+.mg-flow__line:nth-child(3)::before {
+  animation-delay: 1.4s;
+}
+
+@keyframes mg-flow {
+  to {
+    background-position: 11px 0;
+  }
+}
+
+@keyframes mg-packet {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+
+  12%,
+  88% {
+    opacity: 1;
+  }
+
+  100% {
+    left: calc(100% - 8px);
+    opacity: 0;
+  }
+}
+
+/* HubSpot side -------------------------------------------------------------- */
+.mg-to {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+.mg-hub {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 190px;
+  height: 190px;
+  border: 3px solid var(--mg-orange);
+  border-radius: 50%;
+  background: var(--ds-white);
+  box-shadow:
+    0 0 0 10px rgba(var(--ds-orange-rgb), 0.08),
+    0 26px 50px -22px rgba(var(--ds-orange-rgb), 0.55);
+  transition: box-shadow 0.6s ease;
+}
+
+.migration[data-step="4"] .mg-hub {
+  box-shadow:
+    0 0 0 14px rgba(var(--ds-orange-rgb), 0.14),
+    0 30px 60px -18px rgba(var(--ds-orange-rgb), 0.8);
+}
+
+.mg-hub__ring {
+  position: absolute;
+  inset: -3px;
+  border: 2px solid rgba(var(--ds-orange-rgb), 0.5);
+  border-radius: 50%;
+  opacity: 0;
+  animation: mg-ring 2.8s ease-out infinite;
+}
+
+.migration[data-step="4"] .mg-hub__ring {
+  animation-duration: 1.6s;
+}
+
+@keyframes mg-ring {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+}
+
+.mg-hub__logo {
+  display: block;
+  width: 56px;
+  height: auto;
+}
+
+.mg-hub__name {
+  max-width: 150px;
+  color: var(--mg-navy);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.mg-records {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 520px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mg-record {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px 6px 8px;
+  border: 1px solid var(--mg-line);
+  border-radius: 100px;
+  background: var(--ds-white);
+  color: #5a5a5a;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition:
+    border-color 0.4s ease calc(var(--k, 0) * 0.13s),
+    color 0.4s ease calc(var(--k, 0) * 0.13s),
+    background-color 0.4s ease calc(var(--k, 0) * 0.13s);
+}
+
+.mg-record__tick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #d9d2cb;
+  border-radius: 50%;
+  color: transparent;
+  transition:
+    background-color 0.35s ease calc(var(--k, 0) * 0.13s),
+    border-color 0.35s ease calc(var(--k, 0) * 0.13s),
+    color 0.35s ease calc(var(--k, 0) * 0.13s),
+    transform 0.45s var(--ds-ease-out) calc(var(--k, 0) * 0.13s);
+}
+
+.migration[data-step="3"] .mg-record,
+.migration[data-step="4"] .mg-record {
+  border-color: #fcb77f;
+  background: #fffaf4;
+  color: var(--mg-navy);
+}
+
+.migration[data-step="3"] .mg-record__tick,
+.migration[data-step="4"] .mg-record__tick {
+  border-color: var(--mg-orange);
+  background: var(--mg-orange);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* --------------------------------------------------------------------------
+   Steps
+   -------------------------------------------------------------------------- */
+.mg-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 22px 0 0;
+  padding: 0 0 16px;
+  list-style: none;
+  counter-reset: mg;
+}
+
+/* progress bar under the steps */
+.mg-steps::before,
+.mg-steps::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  border-radius: 4px;
+}
+
+.mg-steps::before {
+  right: 0;
+  background: rgba(var(--ds-orange-rgb), 0.14);
+}
+
+.mg-steps::after {
+  width: var(--mg-progress);
+  background: var(--ds-gradient);
+  box-shadow: 0 0 12px rgba(var(--ds-orange-rgb), 0.6);
+  transition: width 0.7s var(--ds-ease-out);
+}
+
+.mg-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 16px 12px 12px;
+  border: 1px solid var(--mg-line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.78);
+  transition:
+    border-color 0.4s ease,
+    background-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.mg-step__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 2px solid #fddcc2;
+  border-radius: 50%;
+  background: var(--ds-white);
+  color: var(--mg-orange);
+  transition:
+    background 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    transform 0.4s var(--ds-ease-out);
+}
+
+.mg-step__text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.mg-step__text strong {
+  color: var(--mg-navy);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.mg-step__text span {
+  margin-top: 2px;
+  color: #555;
+  font-size: 12.5px;
+  line-height: 1.3;
+}
+
+.mg-step.is-on {
+  border-color: rgba(var(--ds-orange-rgb), 0.45);
+  background: #fff;
+}
+
+.mg-step.is-on .mg-step__icon {
+  border-color: var(--mg-orange);
+  background: var(--ds-gradient);
+  color: #fff;
+}
+
+.mg-step.is-now {
+  box-shadow: 0 16px 28px -20px rgba(var(--ds-orange-rgb), 0.9);
+}
+
+.mg-step.is-now .mg-step__icon {
+  animation: mg-pop 0.6s var(--ds-ease-out);
+}
+
+@keyframes mg-pop {
+  0% {
+    transform: scale(0.6);
+  }
+
+  60% {
+    transform: scale(1.18);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion: still, finished state
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .mg-tile,
+  .mg-flow__line,
+  .mg-flow__line::before,
+  .mg-hub__ring,
+  .mg-step.is-now .mg-step__icon {
+    animation: none;
+  }
+
+  .mg-flow__line::before {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Laptop / tablet landscape
+   -------------------------------------------------------------------------- */
+@media (max-width: 1199.98px) {
+  .mg {
+    padding: 22px 20px 26px;
+  }
+
+  .mg-cats {
+    gap: 6px;
+  }
+
+  .mg-cat__label {
+    font-size: 12.5px;
+  }
+
+  .mg-stage {
+    grid-template-columns: minmax(0, 1.2fr) 70px minmax(0, 1fr);
+    padding: 22px 20px;
+  }
+
+  .mg-hub {
+    width: 168px;
+    height: 168px;
+  }
+
+  .mg-hub__name {
+    font-size: 19px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet / phone: chips scroll sideways, the story stacks top -> bottom
+   -------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .migration {
+    padding: 72px 0 72px;
+  }
+
+  .migration__intro br {
+    display: none;
+  }
+
+  .mg-cats {
+    display: flex;
+    gap: 8px;
+    margin-inline: -4px;
+    padding: 4px 4px 8px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .mg-cats::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mg-cat {
+    flex: 0 0 132px;
+    scroll-snap-align: center;
+  }
+
+  .mg-stage {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    row-gap: 4px;
+  }
+
+  .mg-tiles {
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    padding-top: 12px;
+  }
+
+  /* arrows now point downwards */
+  .mg-flow {
+    flex-direction: row;
+    height: 66px;
+    padding: 0 12%;
+  }
+
+  .mg-flow__line {
+    width: 2px;
+    height: auto;
+    margin: 6px 0;
+    background: repeating-linear-gradient(180deg, rgba(var(--ds-orange-rgb), 0.6) 0 6px, transparent 6px 11px);
+    background-size: 2px 11px;
+    animation-name: mg-flow-v;
+  }
+
+  .mg-flow__line::after {
+    top: auto;
+    right: auto;
+    bottom: -6px;
+    left: -5px;
+    border: 6px solid transparent;
+    border-top: 9px solid var(--mg-orange);
+    border-bottom: 0;
+  }
+
+  .mg-flow__line::before {
+    top: 0;
+    left: -4px;
+    animation-name: mg-packet-v;
+  }
+
+  .mg-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@keyframes mg-flow-v {
+  to {
+    background-position: 0 11px;
+  }
+}
+
+@keyframes mg-packet-v {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+
+  12%,
+  88% {
+    opacity: 1;
+  }
+
+  100% {
+    top: calc(100% - 8px);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .migration {
+    padding: 56px 0 56px;
+  }
+
+  .migration__intro {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .mg {
+    padding: 16px 12px 20px;
+    border-radius: 26px;
+  }
+
+  .mg-stage {
+    padding: 18px 14px;
+    border-radius: 22px;
+  }
+
+  .mg-zone-title {
+    font-size: 17px;
+  }
+
+  .mg-tiles {
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: 10px;
+  }
+
+  .mg-tile {
+    padding: 8px;
+    border-radius: 14px;
+  }
+
+  .mg-hub {
+    width: 150px;
+    height: 150px;
+  }
+
+  .mg-hub__logo {
+    width: 46px;
+  }
+
+  .mg-hub__name {
+    font-size: 17px;
+  }
+
+  .mg-record {
+    font-size: 12.5px;
+  }
+
+  .mg-steps {
+    gap: 8px;
+  }
+
+  .mg-step {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .mg-step__text strong {
+    font-size: 14px;
+  }
+}
+
+/* ---- Polish pass: calmer motion ---- */
+.migration__eyebrow {
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.mg-cat__icon {
+  border-color: #f3dcc8;
+  background: #fff4ea;
+  box-shadow: none;
+}
+
+.mg-cat.is-active .mg-cat__icon {
+  background: var(--ds-gradient);
+}
+
+.mg-tile {
+  animation: mg-tile-in 0.55s var(--ds-ease-out) calc(var(--n, 0) * 55ms) both;
+}
+
+.mg-hub__ring {
+  display: none;
+}
+
+.mg-hub,
+.migration[data-step="4"] .mg-hub {
+  box-shadow: 0 24px 44px -30px rgba(var(--ds-navy-rgb), 0.3);
+}
+
+.mg {
+  box-shadow: 0 30px 60px -44px rgba(var(--ds-navy-rgb), 0.22);
+}

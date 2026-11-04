@@ -1,0 +1,180 @@
+/* ==========================================================================
+   Diagram system — shared by every circular / hub-and-spoke graphic.
+
+   .dg                 inline <svg data-diagram>; a [data-reveal] wrapper adds
+                       .is-visible, which starts the entrance sequence
+   .dg__path           stroke drawn on reveal (needs pathLength="1")
+   .dg__node  --i      staggered pop-in; .dg__float inside it bobs gently
+   .dg__dot   --i      small connector dots pop in after the links draw
+   .dg__core           centre element; .dg__pulse is its soft halo
+   .dg__spark          travelling glow (SMIL), paused off-screen by diagrams.js
+
+   Without JS everything renders in its final, static state.
+   ========================================================================== */
+
+.dg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Only animated parts get a centred CSS transform origin; elements that use
+   an SVG transform attribute (translate/rotate) are left untouched. */
+.dg__node,
+.dg__float,
+.dg__node-halo,
+.dg__dot,
+.dg__core,
+.dg__pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Halo used for node hover / pulse states. */
+.dg__node-halo {
+  fill: rgba(var(--ds-orange-rgb), 0.16);
+  opacity: 0;
+  transform: scale(1);
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s var(--ds-ease-out);
+}
+
+.dg__node:hover .dg__node-halo {
+  opacity: 1;
+  transform: scale(1.14);
+}
+
+.dg__float {
+  transition: transform 0.35s var(--ds-ease-out);
+}
+
+.dg__pulse {
+  fill: none;
+  stroke: rgba(var(--ds-orange-rgb), 0.35);
+  stroke-width: 2;
+  opacity: 0;
+}
+
+.dg__spark {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Entrance (only when JS is running; [data-reveal] parent gets .is-visible)
+   -------------------------------------------------------------------------- */
+.js [data-reveal] .dg__path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.js [data-reveal] .dg__node,
+.js [data-reveal] .dg__dot,
+.js [data-reveal] .dg__core {
+  opacity: 0;
+}
+
+.js .is-visible .dg__path {
+  animation: dg-draw var(--dg-draw-duration, 1s) var(--ds-ease-out) var(--dg-draw-delay, 0s) forwards;
+}
+
+.js .is-visible .dg__core {
+  animation: dg-pop 0.7s var(--ds-ease-out) forwards;
+}
+
+.js .is-visible .dg__node {
+  animation: dg-pop 0.6s var(--ds-ease-out) calc(var(--dg-node-delay, 0.6s) + var(--i, 0) * 0.12s) forwards;
+}
+
+.js .is-visible .dg__dot {
+  animation: dg-pop 0.4s var(--ds-ease-out) calc(var(--dg-dot-delay, 1s) + var(--i, 0) * 0.06s) forwards;
+}
+
+/* Ambient motion, started after the entrance. */
+.is-visible .dg__float {
+  animation: dg-float 5.5s ease-in-out var(--float-delay, 0s) infinite;
+}
+
+.is-visible .dg__pulse {
+  animation: dg-pulse 3.6s ease-out 1.6s infinite;
+}
+
+.is-visible .dg__spark {
+  opacity: 1;
+  transition: opacity 0.6s ease 1.8s;
+}
+
+.dg__node:hover .dg__float {
+  animation-play-state: paused;
+}
+
+/* Paused while off-screen (set by diagrams.js). */
+.dg.is-paused .dg__float,
+.dg.is-paused .dg__pulse {
+  animation-play-state: paused;
+}
+
+@keyframes dg-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes dg-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes dg-float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(0, -5px);
+  }
+}
+
+@keyframes dg-pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.22);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] .dg__path {
+    stroke-dashoffset: 0;
+  }
+
+  .js [data-reveal] .dg__node,
+  .js [data-reveal] .dg__dot,
+  .js [data-reveal] .dg__core {
+    opacity: 1;
+  }
+
+  .dg__spark,
+  .dg__pulse {
+    display: none;
+  }
+
+  .dg__float,
+  .is-visible .dg__float {
+    animation: none;
+  }
+}

@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Design tokens — values taken from Figma file cVEQFmILrTnJJz10Bu91YR
+   Loaded after Bootstrap so the --bs-* overrides take effect.
+   ========================================================================== */
+
+:root {
+  /* Brand colours */
+  --ds-orange: #fc6e01;
+  --ds-orange-alt: #fc6f01;
+  --ds-orange-rgb: 252, 110, 1;
+  --ds-gradient-start: #fc7001;
+  --ds-gradient-end: #ef4a00;
+  --ds-gradient: linear-gradient(90deg, var(--ds-gradient-start) 0%, var(--ds-gradient-end) 100%);
+  --ds-navy-rgb: 14, 30, 54;
+
+  /* Neutrals */
+  --ds-black: #000;
+  --ds-white: #fff;
+  --ds-text-muted: #505050;
+  --ds-text-placeholder: #5b5b5b;
+  --ds-border: #dadada;
+  --ds-divider: #eaeaea;
+  --ds-surface-alt: #f5f5f5;
+  --ds-dot: #d9d9d9;
+  --ds-star: #ffea00;
+  --ds-danger: #d92d20;
+  --ds-success: #12805c;
+
+  /* Typography */
+  --ds-font-sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --ds-font-button: "Poppins", var(--ds-font-sans);
+
+  /* Layout */
+  --ds-container: 1440px;
+  --ds-gutter: clamp(16px, 3.2vw, 24px);
+  --ds-header-top: 24px;
+  --ds-header-height: 75px;
+
+  /* Radii */
+  --ds-radius-sm: 6px;
+  --ds-radius-card: 33px;
+  --ds-radius-pill: 58px;
+
+  /* Shadows */
+  --ds-shadow-header: 0 12px 32px rgba(var(--ds-navy-rgb), 0.14);
+  --ds-shadow-card: 0 24px 60px rgba(var(--ds-navy-rgb), 0.18);
+  --ds-shadow-button: 0 10px 22px rgba(239, 74, 0, 0.32);
+
+  /* Focus */
+  --ds-focus-ring: 0 0 0 3px rgba(var(--ds-orange-rgb), 0.35);
+
+  /* Motion */
+  --ds-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ds-duration: 0.6s;
+
+  /* Bootstrap overrides */
+  --bs-body-font-family: var(--ds-font-sans);
+  --bs-body-font-size: 1rem;
+  --bs-body-line-height: 1.625;
+  --bs-body-color: var(--ds-black);
+  --bs-body-bg: var(--ds-white);
+  --bs-link-color: var(--ds-orange);
+  --bs-link-color-rgb: var(--ds-orange-rgb);
+  --bs-link-hover-color: var(--ds-gradient-end);
+  --bs-border-color: var(--ds-border);
+  --bs-border-radius: var(--ds-radius-sm);
+  --bs-focus-ring-color: rgba(var(--ds-orange-rgb), 0.35);
+}
+
+@media (max-width: 991.98px) {
+  :root {
+    --ds-header-top: 12px;
+    --ds-header-height: 64px;
+  }
+}

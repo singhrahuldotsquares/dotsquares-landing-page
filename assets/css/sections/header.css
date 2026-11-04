@@ -1,0 +1,338 @@
+/* ==========================================================================
+   Section 1 — Header / navbar  (Figma node 35:41)
+   White 1440x75 pill, 58px radius, floating 24px from the top.
+   ========================================================================== */
+
+.site-header {
+  position: fixed;
+  top: var(--ds-header-top);
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  transition: top 0.35s var(--ds-ease-out);
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: var(--ds-header-height);
+  padding: 0 22px 0 23px;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-white);
+  transition:
+    box-shadow 0.35s var(--ds-ease-out),
+    border-radius 0.35s var(--ds-ease-out);
+}
+
+.site-header.is-scrolled {
+  top: 12px;
+}
+
+.site-header.is-scrolled .site-nav {
+  box-shadow: var(--ds-shadow-header);
+}
+
+.site-nav__brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.site-nav__brand img {
+  display: block;
+  width: 201px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.site-nav__menu {
+  flex: 1 1 auto;
+  align-items: center;
+}
+
+.site-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 47px;
+  margin-inline: auto;
+}
+
+.site-nav__link {
+  position: relative;
+  display: inline-block;
+  padding-block: 6px;
+  color: var(--ds-black);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.site-nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ds-gradient);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s var(--ds-ease-out);
+}
+
+.site-nav__link:hover,
+.site-nav__link:focus-visible {
+  color: var(--ds-orange);
+}
+
+.site-nav__link:hover::after,
+.site-nav__link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.site-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 27px;
+}
+
+/* Figma: 204px wide, text 14px from the left edge, icon 6px from the right. */
+.site-nav__cta {
+  min-width: 204px;
+  padding-inline: 14px 6px;
+}
+
+/* Region label: AU flag (36x24) + "AUSTRALIA", 33px before the award logo. */
+.site-nav__region {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 9px;
+  margin-right: 6px;
+  color: var(--ds-black);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Australia office: one tidy pill (flag + tap-to-call number), same height as
+   the CTA button so everything in the row shares one centre line. */
+a.site-nav__region {
+  gap: 10px;
+  height: 42px;
+  margin-right: 0;
+  padding: 0 16px 0 12px;
+  border: 1px solid rgba(var(--ds-orange-rgb), 0.35);
+  border-radius: 10px;
+  background: #fffaf3;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.site-nav__region-text {
+  display: flex;
+  align-items: center;
+}
+
+/* The flag says "Australia" visually; the text stays for screen readers. */
+.site-nav__region-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.site-nav__region-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ds-orange);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: none;
+}
+
+.site-nav__region-phone svg {
+  flex-shrink: 0;
+}
+
+a.site-nav__region:hover {
+  border-color: var(--ds-orange);
+  background: #fff;
+  box-shadow: 0 10px 20px -12px rgba(var(--ds-orange-rgb), 0.7);
+}
+
+a.site-nav__region:hover .site-nav__region-phone {
+  color: var(--ds-gradient-end);
+}
+
+a.site-nav__region:focus-visible {
+  outline: 2px solid var(--ds-orange);
+  outline-offset: 3px;
+}
+
+.site-nav__region img {
+  display: block;
+  width: 36px;
+  height: 24px;
+}
+
+.site-nav__award {
+  display: block;
+  width: 139px;
+  height: 45px;
+  object-fit: contain;
+}
+
+/* Hamburger (mobile/tablet only) */
+.site-nav__toggle {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.site-nav__toggle-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ds-black);
+  transition:
+    transform 0.3s var(--ds-ease-out),
+    opacity 0.2s ease;
+}
+
+.site-nav__toggle[aria-expanded="true"] .site-nav__toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.site-nav__toggle[aria-expanded="true"] .site-nav__toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.site-nav__toggle[aria-expanded="true"] .site-nav__toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* --------------------------------------------------------------------------
+   Desktop: menu always visible inline
+   -------------------------------------------------------------------------- */
+@media (min-width: 992px) {
+  .site-nav__menu.collapse:not(.show),
+  .site-nav__menu {
+    display: flex;
+  }
+}
+
+/* Laptop: tighten spacing so everything fits in one row */
+@media (min-width: 992px) and (max-width: 1399.98px) {
+  .site-nav__links {
+    gap: 32px;
+  }
+
+  .site-nav__actions {
+    gap: 18px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .site-nav {
+    padding-inline: 18px 14px;
+  }
+
+  .site-nav__brand img {
+    width: 170px;
+    height: 30px;
+  }
+
+  .site-nav__links {
+    gap: 24px;
+  }
+
+  .site-nav__award {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet & mobile: collapsible panel inside the pill
+   -------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .site-nav {
+    padding: 0 10px 0 20px;
+    border-radius: 32px;
+  }
+
+  .site-nav.is-open {
+    border-radius: 24px;
+    box-shadow: var(--ds-shadow-header);
+  }
+
+  .site-nav__brand img {
+    width: 156px;
+    height: 28px;
+  }
+
+  .site-nav__menu {
+    flex-basis: 100%;
+  }
+
+  .site-nav__links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin: 4px 0 0;
+    padding-top: 8px;
+    border-top: 1px solid var(--ds-divider);
+  }
+
+  .site-nav__link {
+    display: block;
+    padding: 12px 4px;
+  }
+
+  .site-nav__link::after {
+    display: none;
+  }
+
+  .site-nav__actions {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 4px 20px;
+  }
+}
+
+@media (max-width: 399.98px) {
+  .site-nav__brand img {
+    width: 136px;
+    height: 24px;
+  }
+
+  .site-nav__actions .ds-btn {
+    width: 100%;
+  }
+}

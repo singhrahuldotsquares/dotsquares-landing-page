@@ -1,0 +1,296 @@
+/* ==========================================================================
+   Components — reusable across sections
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Button (Figma: orange gradient, Poppins SemiBold 14, 6px radius, 42px tall)
+   -------------------------------------------------------------------------- */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 9px 16px 9px 24px;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-gradient);
+  color: var(--ds-white);
+  font-family: var(--ds-font-button);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.25s var(--ds-ease-out),
+    box-shadow 0.25s var(--ds-ease-out),
+    filter 0.25s var(--ds-ease-out);
+}
+
+.ds-btn__icon {
+  flex-shrink: 0;
+  transition: transform 0.25s var(--ds-ease-out);
+}
+
+.ds-btn:hover {
+  color: var(--ds-white);
+  box-shadow: var(--ds-shadow-button);
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+}
+
+.ds-btn:hover .ds-btn__icon {
+  transform: translate(2px, -2px);
+}
+
+.ds-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.ds-btn:focus-visible {
+  outline: 2px solid var(--ds-white);
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px var(--ds-orange);
+}
+
+.ds-btn[disabled],
+.ds-btn.is-loading {
+  cursor: progress;
+  opacity: 0.75;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   Section heading (Figma: Instrument Sans SemiBold 36/52, centred, orange accent)
+   -------------------------------------------------------------------------- */
+.ds-heading {
+  color: var(--ds-black);
+  font-size: clamp(1.5rem, 1.05rem + 1.3vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.444;
+  text-align: center;
+}
+
+.ds-heading__accent {
+  color: var(--ds-orange-alt);
+}
+
+/* --------------------------------------------------------------------------
+   Eyebrow (Figma: sprocket icon + Instrument Sans Medium 16/22, #fc6f01)
+   -------------------------------------------------------------------------- */
+.ds-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--ds-orange-alt);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.ds-eyebrow img {
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Check list (Figma: 32px #ffedd4 circle + tick, 16/24 #424242, 13px gap)
+   -------------------------------------------------------------------------- */
+.ds-check-list {
+  display: grid;
+  gap: 13px;
+}
+
+.ds-check-list li {
+  position: relative;
+  min-height: 32px;
+  padding: 4px 0 0 45px;
+  color: #424242;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.ds-check-list li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  background: url("../images/icons/check-circle.svg") center / 32px 32px no-repeat;
+}
+
+.ds-check-list strong {
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Form field (Figma: white, 1px #dadada, 6px radius, 42px tall, 13px text)
+   -------------------------------------------------------------------------- */
+.ds-field {
+  position: relative;
+  min-width: 0;
+}
+
+.ds-field__control {
+  display: block;
+  width: 100%;
+  height: 42px;
+  padding: 0 13px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  background-color: var(--ds-white);
+  color: var(--ds-black);
+  font-family: var(--ds-font-sans);
+  font-size: 13px;
+  line-height: 1.25;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+textarea.ds-field__control {
+  height: 116px;
+  padding-block: 12px;
+  resize: none;
+}
+
+.ds-field__control::placeholder {
+  color: var(--ds-text-placeholder);
+  opacity: 1;
+}
+
+.ds-field__control:hover {
+  border-color: #c4c4c4;
+}
+
+.ds-field__control:focus {
+  border-color: var(--ds-orange);
+  outline: none;
+  box-shadow: var(--ds-focus-ring);
+}
+
+.ds-field__control.is-invalid {
+  border-color: var(--ds-danger);
+}
+
+.ds-field__control.is-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.2);
+}
+
+.ds-field__error {
+  display: block;
+  margin-top: 4px;
+  color: var(--ds-danger);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.ds-field__error:empty {
+  display: none;
+}
+
+.ds-form-status {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--ds-radius-sm);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.ds-form-status:empty {
+  display: none;
+}
+
+.ds-form-status.is-success {
+  background: rgba(18, 128, 92, 0.08);
+  color: var(--ds-success);
+}
+
+.ds-form-status.is-error {
+  background: rgba(217, 45, 32, 0.08);
+  color: var(--ds-danger);
+}
+
+/* --------------------------------------------------------------------------
+   Carousel dots (Figma: 7px #d9d9d9 dots, active = 21x4 orange bar)
+   -------------------------------------------------------------------------- */
+.ds-dots {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.ds-dots__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Generous hit area around a small visual dot. */
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  background: none;
+  position: relative;
+  cursor: pointer;
+  transition: width 0.35s var(--ds-ease-out);
+}
+
+.ds-dots__btn::before {
+  content: "";
+  position: absolute;
+  inset: -8px -2px;
+}
+
+.ds-dots__btn::after {
+  content: "";
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ds-dot);
+  transition:
+    width 0.35s var(--ds-ease-out),
+    height 0.35s var(--ds-ease-out),
+    border-radius 0.35s var(--ds-ease-out),
+    background-color 0.35s ease;
+}
+
+.ds-dots__btn:hover::after {
+  background: var(--ds-white);
+}
+
+.ds-dots__btn[aria-current="true"] {
+  width: 21px;
+}
+
+.ds-dots__btn[aria-current="true"]::after {
+  width: 21px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--ds-orange);
+}
+
+/* --------------------------------------------------------------------------
+   Mobile: 16px form fields. iOS Safari zooms the whole page when a focused
+   input / textarea is smaller than 16px; the element selectors out-rank the
+   per-section field rules that load after this file.
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  input.ds-field__control,
+  textarea.ds-field__control,
+  select.ds-field__control,
+  input.cta__input,
+  textarea.cta__input,
+  input.site-footer__input {
+    font-size: 16px;
+  }
+}
+
+/* ---- Polish pass: flat, consistent icon treatment ---- */
+.ds-lock {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: -2px;
+}

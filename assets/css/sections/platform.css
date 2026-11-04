@@ -1,0 +1,903 @@
+/* ==========================================================================
+   Too Many Tools / The Challenge / The Solution — organised by customer journey
+
+   One compact "stage" card instead of three tall columns: pick a step of the
+   journey (Attract -> Engage -> Convert -> Grow -> Delight -> Analyze) and see
+   that stage's challenge, the solution that answers it, and the Hubs / AI
+   Agents that power it. Steps auto-advance; click, tap, swipe or use arrow
+   keys to choose. (platform.js drives the tabs; without JS every stage is
+   simply listed.)
+   ========================================================================== */
+
+.platform {
+  --pf-orange: var(--ds-orange);
+  --pf-navy: #0e1e36;
+  --pf-cols: minmax(0, 1fr) 72px minmax(0, 1fr) minmax(0, 1.3fr);
+  --pf-dur: 6500ms;
+
+  position: relative;
+  padding: 0 0 96px;
+  background: linear-gradient(180deg, var(--ds-white) 0%, var(--ds-white) 55%, #fffaf3 100%);
+  overflow-x: clip;
+}
+
+/* --------------------------------------------------------------------------
+   Heading block
+   -------------------------------------------------------------------------- */
+.platform__eyebrow {
+  display: flex;
+  width: fit-content;
+  gap: 8px;
+  margin-inline: auto;
+  padding: 7px 18px 7px 12px;
+  border: 1px solid rgba(var(--ds-orange-rgb), 0.28);
+  border-radius: 100px;
+  background: var(--ds-white);
+  box-shadow: 0 8px 20px -10px rgba(var(--ds-orange-rgb), 0.5);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.platform__eyebrow img {
+  animation: pf-spin 9s linear infinite;
+}
+
+.platform__title {
+  margin-top: 16px;
+}
+
+/* Shimmering accent line */
+.platform__title .ds-heading__accent {
+  background: linear-gradient(90deg, #fc6e01 0%, #ffa14a 30%, #ef4a00 60%, #fc6e01 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: pf-shimmer 7s linear infinite;
+}
+
+@keyframes pf-shimmer {
+  to {
+    background-position: -250% 0;
+  }
+}
+
+@keyframes pf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.platform__intro {
+  max-width: 980px;
+  margin: 12px auto 0;
+  color: #333;
+  font-size: 17px;
+  line-height: 28px;
+  text-align: center;
+}
+
+/* Figma centres the heading at 50% - 16.5px. */
+@media (min-width: 1400px) {
+  .platform__title {
+    transform: translateX(-16.5px);
+  }
+
+  .js .platform__title[data-reveal] {
+    transform: translate3d(-16.5px, 24px, 0);
+  }
+
+  .js .platform__title[data-reveal].is-visible {
+    transform: translateX(-16.5px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Journey steps
+   -------------------------------------------------------------------------- */
+.journey-flow {
+  margin-top: 36px;
+}
+
+.pf__hubline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 22px;
+  color: var(--pf-navy);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.pf__hubline img {
+  animation: pf-spin 12s linear infinite;
+}
+
+.pf__hubline-accent {
+  color: #ff5410;
+}
+
+.pf__steps {
+  --pf-progress: 0%;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* Rail behind the step icons, filling up to the current stage */
+.pf__rail {
+  position: absolute;
+  z-index: 0;
+  top: 27px;
+  left: calc(100% / 12);
+  right: calc(100% / 12);
+  height: 3px;
+  border-radius: 3px;
+  background: repeating-linear-gradient(90deg, rgba(var(--ds-orange-rgb), 0.28) 0 7px, transparent 7px 13px);
+}
+
+.pf__rail-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--pf-progress);
+  border-radius: 3px;
+  background: var(--ds-gradient);
+  box-shadow: 0 0 12px rgba(var(--ds-orange-rgb), 0.55);
+  transition: width 0.7s var(--ds-ease-out);
+}
+
+.pf-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 0 6px 16px;
+  border: 0;
+  background: none;
+  color: var(--pf-navy);
+  text-align: center;
+  cursor: pointer;
+}
+
+.pf-step:focus-visible {
+  outline: 3px solid var(--ds-orange);
+  outline-offset: 2px;
+  border-radius: 16px;
+}
+
+.pf-step__icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: 2px solid #fddcc2;
+  border-radius: 50%;
+  background: var(--ds-white);
+  color: var(--pf-orange);
+  box-shadow: 0 10px 22px -14px rgba(var(--ds-navy-rgb), 0.5);
+  transition:
+    transform 0.4s var(--ds-ease-out),
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.4s ease;
+}
+
+.pf-step__icon::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid rgba(var(--ds-orange-rgb), 0.5);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.pf-step__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.pf-step__text strong {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  transition: color 0.3s ease;
+}
+
+.pf-step__text span {
+  color: #555;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.pf-step:hover .pf-step__icon {
+  transform: translateY(-3px);
+  border-color: var(--pf-orange);
+}
+
+.pf-step.is-done .pf-step__icon {
+  border-color: var(--pf-orange);
+}
+
+.pf-step.is-active .pf-step__icon {
+  transform: scale(1.1);
+  border-color: var(--pf-orange);
+  background: var(--ds-gradient);
+  color: var(--ds-white);
+  box-shadow:
+    0 0 0 6px rgba(var(--ds-orange-rgb), 0.14),
+    0 16px 28px -10px rgba(var(--ds-orange-rgb), 0.75);
+}
+
+.pf-step.is-active .pf-step__icon::after {
+  animation: pf-ring 2.4s ease-out infinite;
+}
+
+.pf-step.is-active .pf-step__text strong {
+  color: #e85a00;
+}
+
+@keyframes pf-ring {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
+/* Timer bar under the active step while auto-advance is running */
+.pf-step::after {
+  content: "";
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 2px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(var(--pf-orange), var(--pf-orange)) 0 0 / 0% 100% no-repeat rgba(var(--ds-orange-rgb), 0.16);
+  opacity: 0;
+}
+
+.platform.is-playing .pf-step.is-active::after {
+  opacity: 1;
+  animation: pf-timer var(--pf-dur) linear forwards;
+}
+
+@keyframes pf-timer {
+  to {
+    background-size: 100% 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Stage card
+   -------------------------------------------------------------------------- */
+.pf__stage {
+  position: relative;
+  margin-top: 20px;
+  padding: 28px 30px 30px;
+  border: 1px solid rgba(var(--ds-orange-rgb), 0.16);
+  border-radius: 34px;
+  background: linear-gradient(150deg, #fff 0%, #fffaf3 60%, #fff0e0 100%);
+  box-shadow: 0 40px 70px -46px rgba(var(--ds-orange-rgb), 0.45);
+}
+
+/* Column titles (shared by every stage) */
+.pf-heads {
+  display: grid;
+  grid-template-columns: var(--pf-cols);
+  margin-bottom: 18px;
+}
+
+.pf-head--challenge {
+  grid-column: 1;
+}
+
+.pf-head--solution {
+  grid-column: 3;
+}
+
+.pf-head--tools {
+  grid-column: 4;
+  padding-left: 28px;
+}
+
+.pf-head__tag {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 7px;
+  height: 33px;
+  padding: 0 17px 0 7px;
+  border-radius: 100px;
+  background: #feeee8;
+  color: #fd1f03;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.pf-head--solution .pf-head__tag {
+  gap: 4px;
+  padding: 0 16px 0 5px;
+  background: #dff3e5;
+  color: #146a2d;
+}
+
+.pf-head__tag--tools {
+  padding: 0 16px;
+  border: 1px solid #fdd8c5;
+  background: #fff;
+  color: #d35400;
+  box-shadow: 0 8px 18px -12px rgba(var(--ds-orange-rgb), 0.6);
+}
+
+.pf-head__title {
+  margin-top: 12px;
+  padding-right: 12px;
+  color: var(--ds-black);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* One stage = challenge -> solution + its tools */
+.pf__panels {
+  display: block;
+}
+
+.pf-panel {
+  display: grid;
+  grid-template-columns: var(--pf-cols);
+  align-items: stretch;
+  min-height: 300px; /* fits the tallest stage so nothing jumps */
+  border-radius: 24px;
+}
+
+.pf-panel[hidden] {
+  display: none;
+}
+
+.pf-panel:focus-visible {
+  outline: 3px solid var(--ds-orange);
+  outline-offset: 6px;
+}
+
+.pf-card {
+  --card-border: #fddfd9;
+  --card-icon: url("../../images/icons/challenge-cross.svg");
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 88px;
+  margin: 0;
+  padding: 14px 18px 14px 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* Three problem -> solution rows per stage; subgrid keeps each side
+   aligned with its column title above. */
+.pf-pairs {
+  grid-column: 1 / 4;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-content: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-pair {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: stretch;
+}
+
+.pf-card--challenge {
+  grid-column: 1;
+  background: linear-gradient(165deg, #fff1ec 0%, #fff 70%);
+  box-shadow: 0 18px 30px -24px rgba(253, 31, 3, 0.5);
+}
+
+.pf-card--solution {
+  --card-border: #cfe6d6;
+  --card-icon: url("../../images/icons/solution-check.svg");
+
+  grid-column: 3;
+  background: linear-gradient(165deg, #e9f8ee 0%, #fff 70%);
+  box-shadow: 0 18px 30px -24px rgba(10, 138, 58, 0.5);
+}
+
+.pf-card__icon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  background: var(--card-icon) center / 38px 38px no-repeat;
+}
+
+.pf-card__text {
+  color: var(--pf-navy);
+  font-size: 16.5px;
+  font-weight: 600;
+  line-height: 1.32;
+}
+
+/* Arrow between challenge and solution */
+.pf-arrow {
+  position: relative;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pf-arrow::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  right: -4px;
+  height: 2px;
+  margin-top: -1px;
+  background: repeating-linear-gradient(90deg, rgba(var(--ds-orange-rgb), 0.6) 0 6px, transparent 6px 11px);
+  background-size: 11px 2px;
+  animation: pf-flow 1s linear infinite;
+}
+
+.pf-arrow svg {
+  position: relative;
+  box-sizing: content-box;
+  width: 18px;
+  height: 18px;
+  padding: 8px;
+  border: 2px solid var(--pf-orange);
+  border-radius: 50%;
+  background: var(--ds-white);
+  color: var(--pf-orange);
+  box-shadow: 0 10px 20px -10px rgba(var(--ds-orange-rgb), 0.7);
+  animation: pf-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes pf-flow {
+  to {
+    background-position: 11px 0;
+  }
+}
+
+@keyframes pf-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 10px 20px -10px rgba(var(--ds-orange-rgb), 0.7),
+      0 0 0 0 rgba(var(--ds-orange-rgb), 0);
+  }
+
+  50% {
+    box-shadow:
+      0 10px 20px -10px rgba(var(--ds-orange-rgb), 0.7),
+      0 0 0 9px rgba(var(--ds-orange-rgb), 0.16);
+  }
+}
+
+/* Hubs / agents behind the stage */
+.pf-tools {
+  grid-column: 4;
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  margin: 0 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-tool {
+  --tool-border: #fdd8c5;
+  --tool-tint: #fff7f1;
+  --tool-glow: rgba(var(--ds-orange-rgb), 0.5);
+  --tool-kind: #d35400;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px 12px 12px;
+  border: 1px solid var(--tool-border);
+  border-radius: 22px;
+  background: linear-gradient(100deg, #fff 0%, var(--tool-tint) 100%);
+  /* `translate` stays free of the entrance animation (which uses transform). */
+  transition:
+    translate 0.3s var(--ds-ease-out),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.pf-tool--agent {
+  --tool-border: #cfe6d6;
+  --tool-tint: #f1faf4;
+  --tool-glow: rgba(10, 138, 58, 0.45);
+  --tool-kind: #0a7a33;
+}
+
+.pf-tool:hover {
+  translate: 6px 0;
+  border-color: var(--tool-kind);
+  box-shadow: 0 16px 28px -18px var(--tool-glow);
+}
+
+.pf-tool__tile {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  border: 1px solid var(--tool-border);
+  border-radius: 18px;
+  background: var(--ds-white);
+  transition: transform 0.4s var(--ds-ease-out);
+}
+
+.pf-tool__tile img {
+  display: block;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  /* Two exports have opaque white backgrounds; multiply drops the white. */
+  mix-blend-mode: multiply;
+}
+
+.pf-tool:hover .pf-tool__tile {
+  transform: rotate(-6deg) scale(1.08);
+}
+
+.pf-tool__body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.pf-tool__kind {
+  color: var(--tool-kind);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.pf-tool__name {
+  margin-top: 2px;
+  color: var(--ds-black);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.pf-tool__desc {
+  margin-top: 3px;
+  color: #404040;
+  font-size: 13.5px;
+  line-height: 1.35;
+}
+
+/* --------------------------------------------------------------------------
+   Stage change: cards slide in from either side, tools follow in turn
+   -------------------------------------------------------------------------- */
+.js .pf-panel:not([hidden]) .pf-card--challenge {
+  animation: pf-in-left 0.6s var(--ds-ease-out) calc(var(--p, 0) * 0.16s) both;
+}
+
+.js .pf-panel:not([hidden]) .pf-card--solution {
+  animation: pf-in-right 0.6s var(--ds-ease-out) calc(0.1s + var(--p, 0) * 0.16s) both;
+}
+
+.js .pf-panel:not([hidden]) .pf-arrow svg {
+  animation:
+    pf-pop 0.5s var(--ds-ease-out) calc(0.2s + var(--p, 0) * 0.16s) both,
+    pf-pulse 2.6s ease-in-out calc(0.8s + var(--p, 0) * 0.3s) infinite;
+}
+
+.js .pf-panel:not([hidden]) .pf-tool {
+  animation: pf-in-up 0.55s var(--ds-ease-out) calc(0.22s + var(--n, 0) * 0.1s) both;
+}
+
+@keyframes pf-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-34px, 0, 0);
+  }
+}
+
+@keyframes pf-in-right {
+  from {
+    opacity: 0;
+    transform: translate3d(34px, 0, 0);
+  }
+}
+
+@keyframes pf-in-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+}
+
+@keyframes pf-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .platform__eyebrow img,
+  .platform__title .ds-heading__accent,
+  .pf__hubline img,
+  .pf-step.is-active .pf-step__icon::after,
+  .pf-arrow::before,
+  .pf-arrow svg,
+  .platform.is-playing .pf-step.is-active::after {
+    animation: none;
+  }
+
+  .js .pf-panel:not([hidden]) .pf-card,
+  .js .pf-panel:not([hidden]) .pf-arrow svg,
+  .js .pf-panel:not([hidden]) .pf-tool {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Laptop / tablet landscape: the tools drop below the challenge -> solution pair
+   -------------------------------------------------------------------------- */
+@media (max-width: 1199.98px) {
+  .platform {
+    --pf-cols: minmax(0, 1fr) 64px minmax(0, 1fr);
+  }
+
+  .platform__intro br {
+    display: none;
+  }
+
+  .pf-head--tools {
+    display: none;
+  }
+
+  .pf-panel {
+    min-height: 0;
+    row-gap: 22px;
+  }
+
+  .pf-pairs {
+    grid-column: 1 / -1;
+  }
+
+  .pf-tools {
+    position: relative;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin: 0;
+    padding-top: 46px;
+  }
+
+  /* The "Every Hub" label moves with the tools */
+  .pf-tools::before {
+    content: "EVERY HUB. ONE CONNECTED PLATFORM.";
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    height: 30px;
+    padding: 0 14px;
+    white-space: nowrap;
+    border: 1px solid #fdd8c5;
+    border-radius: 100px;
+    background: #fff;
+    color: #d35400;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 28px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Phones: steps scroll sideways, cards stack
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .platform {
+    padding-bottom: 56px;
+  }
+
+  .platform__intro {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .journey-flow {
+    margin-top: 28px;
+  }
+
+  .pf__hubline {
+    font-size: 16px;
+  }
+
+  .pf__steps {
+    display: flex;
+    gap: 4px;
+    margin-inline: calc(var(--ds-gutter) * -1);
+    padding: 8px var(--ds-gutter) 0;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .pf__steps::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pf__rail {
+    display: none;
+  }
+
+  .pf-step {
+    flex: 0 0 92px;
+    scroll-snap-align: center;
+  }
+
+  .pf__stage {
+    margin-top: 6px;
+    padding: 18px 14px;
+    border-radius: 26px;
+  }
+
+  .pf-heads {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .pf-head--challenge,
+  .pf-head--solution {
+    grid-column: 1;
+  }
+
+  .pf-head__title {
+    font-size: 17px;
+  }
+
+  .pf-panel {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .pf-card--challenge,
+  .pf-card--solution,
+  .pf-arrow,
+  .pf-tools,
+  .pf-pairs {
+    grid-column: 1;
+  }
+
+  .pf-pairs {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .pf-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pf-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    min-height: 0;
+    padding: 16px 16px 16px 14px;
+    border-radius: 20px;
+  }
+
+  .pf-card__icon {
+    width: 40px;
+    height: 40px;
+    background-size: 40px 40px;
+  }
+
+  .pf-card__text {
+    font-size: 17px;
+  }
+
+  .pf-arrow {
+    height: 36px;
+  }
+
+  .pf-arrow::before {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    right: auto;
+    width: 2px;
+    height: auto;
+    margin: 0 0 0 -1px;
+    background: repeating-linear-gradient(180deg, rgba(var(--ds-orange-rgb), 0.6) 0 6px, transparent 6px 11px);
+  }
+
+  .pf-arrow svg {
+    width: 16px;
+    height: 16px;
+    padding: 7px;
+    transform: rotate(90deg);
+  }
+
+  .pf-tools {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 44px;
+  }
+
+  .pf-tool:hover {
+    translate: 0 0;
+  }
+}
+
+@media (max-width: 389.98px) {
+  .pf-tools::before {
+    padding: 0 10px;
+    font-size: 10.5px;
+    letter-spacing: 0;
+  }
+}
+
+/* ---- Polish pass: calmer motion, flat eyebrow ---- */
+.platform__eyebrow {
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.platform__eyebrow img,
+.pf__hubline img,
+.pf-step.is-active .pf-step__icon::after,
+.pf-arrow svg,
+.js .pf-panel:not([hidden]) .pf-arrow svg {
+  animation: none;
+}
+
+.platform__title .ds-heading__accent {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--ds-orange-alt);
+  animation: none;
+}
+
+.pf-step.is-active .pf-step__icon {
+  box-shadow: 0 0 0 5px rgba(var(--ds-orange-rgb), 0.12);
+}
+
+.pf__stage {
+  box-shadow: 0 30px 60px -44px rgba(var(--ds-navy-rgb), 0.22);
+}

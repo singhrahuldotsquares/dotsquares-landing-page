@@ -1,0 +1,290 @@
+/* ==========================================================================
+   CTA + consultation form
+   Styles follow the live reference (dotsquares.com/lp/ai-mobile-app-development):
+   135deg orange → dark-brown gradient · 1280px container · two equal columns
+   with a 64px gap (stacked < 1024) · translucent form card.
+   ========================================================================== */
+
+.cta {
+  --cta-orange: #ca3400;
+
+  position: relative;
+  overflow: hidden;
+  padding: 80px 0;
+  background: linear-gradient(135deg, #ff7a1a, #251106);
+  color: var(--ds-white);
+}
+
+/* Soft red glow behind the form, as on the live site. */
+.cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(at 80% 50%, #9c2400 0%, transparent 60%);
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.cta__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 64px;
+  align-items: center;
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 32px;
+}
+
+/* --------------------------------------------------------------------------
+   Left column
+   -------------------------------------------------------------------------- */
+.cta__title {
+  margin-bottom: 24px;
+  color: var(--ds-white);
+  font-family: "Sora", var(--ds-font-sans);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.cta__points {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+
+.cta__point {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.cta__check {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.cta__btn,
+.cta__submit {
+  border: 0;
+  border-radius: 12px;
+  background: var(--ds-white);
+  color: var(--cta-orange);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 21px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease,
+    color 0.2s ease, opacity 0.2s ease;
+}
+
+.cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+}
+
+.cta__btn svg {
+  transition: transform 0.2s ease;
+}
+
+/* Hover: lift, deeper shadow and a warm tint; the arrow nudges forward. */
+.cta__btn:hover,
+.cta__submit:not(:disabled):hover {
+  background: #fff3ea;
+  color: #a82b00;
+  box-shadow: 0 14px 24px -8px rgba(0, 0, 0, 0.35), 0 4px 8px -4px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.cta__btn:hover svg {
+  transform: translateX(4px);
+}
+
+.cta__btn:active,
+.cta__submit:not(:disabled):active {
+  box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.3);
+  transform: translateY(0);
+}
+
+.cta__btn:focus-visible,
+.cta__submit:focus-visible {
+  outline: 2px solid var(--ds-white);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Form card
+   -------------------------------------------------------------------------- */
+.cta__card {
+  min-width: 0;
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cta__card-title {
+  margin-bottom: 20px;
+  color: var(--ds-white);
+  font-family: "Sora", var(--ds-font-sans);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.cta__card-sub {
+  margin-bottom: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.cta__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cta__input {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--ds-white);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  line-height: 21px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* The extra 5px below matches the live layout, where the inline textarea
+   leaves a baseline gap before the submit button. */
+.cta__input--area {
+  height: 89px;
+  margin-bottom: 5px;
+  resize: none;
+}
+
+.cta__input::placeholder {
+  color: var(--ds-white);
+  opacity: 1;
+}
+
+.cta__input:hover {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.cta__input:focus {
+  border-color: var(--ds-white);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.cta__input.is-invalid {
+  border-color: #ffc9b0;
+  box-shadow: 0 0 0 1px #ffc9b0;
+}
+
+/* Error text sits on the dark gradient, so it uses a light tint
+   instead of the default red. */
+.cta .ds-field__error,
+.cta .ds-form-status {
+  font-family: "Inter", var(--ds-font-sans);
+}
+
+.cta .ds-field__error {
+  margin-top: 6px;
+  color: #ffe3d4;
+  font-weight: 500;
+}
+
+.cta__submit {
+  display: block;
+  width: 100%;
+  padding: 14px 0;
+}
+
+.cta__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cta .ds-form-status {
+  margin-top: 0;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--ds-white);
+}
+
+.cta__note {
+  margin-top: 16px;
+  color: var(--ds-white);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* Inline so the lock stays beside the first word when the note wraps. */
+.cta__note img {
+  display: inline-block;
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta__btn:hover,
+  .cta__submit:not(:disabled):hover,
+  .cta__btn:hover svg {
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet & mobile (< 1024): stacked, smaller heading, as on the live site
+   -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .cta {
+    padding: 40px 0;
+  }
+
+  .cta__inner {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: var(--ds-gutter);
+  }
+
+  .cta__title {
+    font-size: 30px;
+    line-height: 1.25;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile spacing (< 768): compact vertical rhythm
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .cta__inner {
+    row-gap: 40px;
+  }
+}

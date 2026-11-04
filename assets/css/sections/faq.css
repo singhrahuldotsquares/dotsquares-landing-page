@@ -1,0 +1,242 @@
+/* ==========================================================================
+   FAQ — Frequently Asked Questions
+   Styles follow the live reference (dotsquares.com/lp/ai-mobile-app-development):
+   832px column · 16px radius items · 12px gap · single-open accordion ·
+   "Load More" reveals the remaining questions.
+   ========================================================================== */
+
+.faq {
+  --faq-ink: #0b0c1a;
+  --faq-muted: #665b53;
+  --faq-line: #eae3de;
+  --faq-orange: #ff7500;
+
+  padding: 80px 0;
+  background: var(--ds-white);
+}
+
+.faq__inner {
+  width: 100%;
+  max-width: 896px;
+  margin-inline: auto;
+  padding-inline: 32px;
+}
+
+/* --------------------------------------------------------------------------
+   Heading
+   -------------------------------------------------------------------------- */
+.faq__head {
+  margin-bottom: 56px;
+  text-align: center;
+}
+
+.faq__chip {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 6px 12px;
+  border: 1px solid #ffd7b2;
+  border-radius: 9999px;
+  background: #ffebd9;
+  color: #ca3400;
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.faq__title {
+  margin-bottom: 16px;
+  color: var(--faq-ink);
+  font-family: "Sora", var(--ds-font-sans);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.faq__sub {
+  color: var(--faq-muted);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 18px;
+  line-height: 28px;
+}
+
+/* --------------------------------------------------------------------------
+   Accordion
+   -------------------------------------------------------------------------- */
+.faq__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq__item {
+  overflow: hidden;
+  border: 1px solid var(--faq-line);
+  border-radius: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq__item[hidden] {
+  display: none;
+}
+
+.faq__item.is-open {
+  border-color: #ffb880;
+  box-shadow: 0 4px 20px -8px rgba(217, 75, 0, 0.15);
+}
+
+.faq__q {
+  margin: 0;
+}
+
+.faq__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px 24px;
+  border: 0;
+  background: var(--ds-white);
+  color: var(--faq-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.faq__item.is-open .faq__btn {
+  background: #fff0e3;
+}
+
+.faq__btn:focus-visible {
+  outline: 2px solid var(--faq-orange);
+  outline-offset: -2px;
+  border-radius: 16px 16px 0 0;
+}
+
+.faq__item:not(.is-open) .faq__btn:focus-visible {
+  border-radius: 16px;
+}
+
+.faq__q-text {
+  padding-right: 16px;
+  font-family: "Sora", var(--ds-font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+}
+
+.faq__chev {
+  flex-shrink: 0;
+  color: var(--faq-orange);
+  transition: transform 0.25s ease;
+}
+
+.faq__item.is-open .faq__chev {
+  transform: rotate(180deg);
+}
+
+/* Height animation: the grid row grows from 0fr to 1fr; visibility keeps
+   collapsed answers out of the tab order and the accessibility tree. */
+.faq__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.faq__item.is-open .faq__panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows 0.3s ease, visibility 0s;
+}
+
+.faq__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.faq__body {
+  padding: 0 24px 20px;
+  border-top: 1px solid #ffdbbf;
+}
+
+.faq__a {
+  padding-top: 16px;
+  color: var(--faq-muted);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  line-height: 1.625;
+}
+
+/* --------------------------------------------------------------------------
+   Load More
+   -------------------------------------------------------------------------- */
+.faq__more {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.faq__more[hidden] {
+  display: none;
+}
+
+.faq__more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 14px 24px;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ff7900 0%, #ec3e00 100%);
+  color: var(--ds-white);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.faq__more-btn:hover {
+  opacity: 0.9;
+}
+
+.faq__more-btn:focus-visible {
+  outline: 2px solid var(--faq-orange);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__item,
+  .faq__btn,
+  .faq__chev,
+  .faq__panel,
+  .faq__item.is-open .faq__panel {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet & mobile (< 1024): smaller heading and spacing, as on the live site
+   -------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .faq {
+    padding: 40px 0;
+  }
+
+  .faq__inner {
+    padding-inline: var(--ds-gutter);
+  }
+
+  .faq__head {
+    margin-bottom: 20px;
+  }
+
+  .faq__title {
+    font-size: 30px;
+    line-height: 1.2;
+  }
+}

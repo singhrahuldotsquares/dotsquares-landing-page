@@ -1,0 +1,315 @@
+/* ==========================================================================
+   Section 9 — HubSpot Onboarding & Training
+   Figma: eyebrow y 6944 · heading 6979 · intro 7093 (1030 wide) ·
+          card 242/7238 1435x696 (photo 717 wide) · items 1011/7336 ·
+          CTA 828/8002 263x42 · next block at 8144
+   The previous section already includes the 101px gap above the eyebrow.
+   ========================================================================== */
+
+.training {
+  padding: 0 0 100px;
+  background: var(--ds-white);
+  overflow-x: clip;
+}
+
+.training__eyebrow {
+  justify-content: center;
+}
+
+.training__title {
+  margin-top: 13px;
+}
+
+.training__intro {
+  max-width: 1030px;
+  margin: 10px auto 0;
+  color: var(--ds-black);
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+}
+
+/* Figma centres the intro at 50% - 7px. */
+@media (min-width: 1400px) {
+  .training__intro {
+    transform: translateX(-7px);
+  }
+
+  .js .training__intro[data-reveal] {
+    transform: translate3d(-7px, 24px, 0);
+  }
+
+  .js .training__intro[data-reveal].is-visible {
+    transform: translateX(-7px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Card: photo (left) + training items (right)
+   -------------------------------------------------------------------------- */
+.training-card {
+  display: grid;
+  grid-template-columns: 717px minmax(0, 1fr);
+  min-height: 696px;
+  margin: 55px 3px 0 2px;
+  overflow: hidden;
+  border: 1px solid #d3d3d3;
+  border-radius: 24px;
+  background: var(--ds-white);
+}
+
+.training-card__media {
+  position: relative;
+  min-height: 100%;
+  background: #d9d9d9;
+}
+
+.training-card__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.training-card__body {
+  min-width: 0;
+  padding: 97px 20px 48px 51px;
+}
+
+.training-list {
+  display: grid;
+  gap: 50px;
+}
+
+.training-item {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  column-gap: 14px;
+  align-items: start;
+}
+
+.training-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border: 1px solid #ede5e5;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--ds-white) 0%, #e8ebff 100%);
+  box-shadow: 0 8px 18px -5px rgba(250, 106, 1, 0.34);
+  transition:
+    transform 0.3s var(--ds-ease-out),
+    box-shadow 0.3s ease;
+}
+
+.training-item__icon img {
+  display: block;
+  max-width: none;
+}
+
+.training-item__body {
+  padding-top: 4px;
+}
+
+/* Figma sets the Marketing item 5px lower than the others. */
+.training-item--marketing .training-item__body {
+  padding-top: 9px;
+}
+
+.training-item__title {
+  color: var(--ds-black);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 20px;
+  transition: color 0.2s ease;
+}
+
+.training-item__text {
+  max-width: 551px;
+  margin-top: 8px;
+  color: var(--ds-black);
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.training-item:hover .training-item__icon {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 22px -6px rgba(250, 106, 1, 0.42);
+}
+
+.training-item:hover .training-item__title {
+  color: var(--ds-orange);
+}
+
+.training__cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 68px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .training-item__icon,
+  .training-item__title {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Laptop (1200–1399): equal columns
+   -------------------------------------------------------------------------- */
+@media (max-width: 1399.98px) {
+  .training__intro {
+    max-width: 980px;
+  }
+
+  .training-card {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 0;
+    margin: 48px 0 0;
+  }
+
+  .training-card__body {
+    padding: 64px 36px 56px 44px;
+  }
+
+  .training-list {
+    gap: 40px;
+  }
+
+  .training-item__text {
+    max-width: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Small laptop / tablet landscape (992–1199)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1199.98px) {
+  .training {
+    padding-bottom: 80px;
+  }
+
+  .training-card {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  }
+
+  .training-card__body {
+    padding: 44px 28px 44px 32px;
+  }
+
+  .training-list {
+    gap: 32px;
+  }
+
+  .training-item__text {
+    font-size: 15px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet portrait & mobile (< 992): photo stacked above the items
+   -------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .training-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .training-card__media {
+    min-height: 0;
+    aspect-ratio: 717 / 420;
+  }
+
+  .training-card__body {
+    padding: 36px 28px 40px;
+  }
+
+  .training-list {
+    gap: 28px;
+  }
+
+  .training__cta {
+    margin-top: 48px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .training {
+    padding-bottom: 64px;
+  }
+
+  .training__intro {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .training-card {
+    margin-top: 36px;
+    border-radius: 20px;
+  }
+
+  .training-card__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .training-card__body {
+    padding: 28px 16px 32px;
+  }
+
+  .training-item {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+
+  .training-item__icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .training-item__icon img {
+    transform: scale(0.8);
+  }
+
+  .training-item__body,
+  .training-item--marketing .training-item__body {
+    padding-top: 2px;
+  }
+
+  .training-item__title {
+    font-size: 17px;
+  }
+
+  .training-item__text {
+    font-size: 15px;
+    line-height: 21px;
+  }
+
+  .training__cta {
+    margin-top: 36px;
+  }
+
+  .training__cta .ds-btn {
+    width: 100%;
+    max-width: 340px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile spacing (< 768): compact vertical rhythm
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .training {
+    padding-bottom: 40px;
+  }
+}
+
+/* ---- Polish pass: flat icon discs ---- */
+.training-item__icon {
+  border-color: #f3dcc8;
+  background: #fff4ea;
+  box-shadow: none;
+}
+
+.training-item:hover .training-item__icon {
+  box-shadow: none;
+}

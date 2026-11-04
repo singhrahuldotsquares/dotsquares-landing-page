@@ -1,0 +1,186 @@
+/* ==========================================================================
+   Section 3 — Trusted by + client logo marquee  (Figma node 1:176)
+   Heading 36/52 at y 1082, logo strip (194x70 cards, 18px gap) at y 1215.
+   ========================================================================== */
+
+.trusted {
+  padding: 86px 0 103px;
+  background: var(--ds-white);
+  overflow: clip;
+}
+
+.trusted__title {
+  margin-bottom: 29px;
+  color: var(--ds-black);
+  font-size: clamp(1.5rem, 1.05rem + 1.3vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.444;
+  text-align: center;
+}
+
+.trusted__accent {
+  color: var(--ds-orange-alt);
+}
+
+/* Figma centres the heading at 50% - 7.5px. */
+@media (min-width: 1400px) {
+  .trusted__title {
+    transform: translateX(-7.5px);
+  }
+
+  .js .trusted__title[data-reveal] {
+    transform: translate3d(-7.5px, 24px, 0);
+  }
+
+  .js .trusted__title[data-reveal].is-visible {
+    transform: translateX(-7.5px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Marquee
+   Without JS (or with reduced motion) the strip is a static row that can be
+   scrolled horizontally; marquee.js turns it into a seamless loop.
+   -------------------------------------------------------------------------- */
+.logo-marquee {
+  --logo-card-w: 194px;
+  --logo-card-h: 70px;
+  --logo-gap: 18px;
+  --logo-scale: 1;
+
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.logo-marquee::-webkit-scrollbar {
+  display: none;
+}
+
+.logo-marquee__track {
+  display: flex;
+  width: max-content;
+}
+
+.logo-marquee__group {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--logo-gap);
+  padding-right: var(--logo-gap);
+}
+
+.logo-card {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--logo-card-w);
+  height: var(--logo-card-h);
+  border: 1px solid #e9e9e9;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-white);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s var(--ds-ease-out);
+}
+
+.logo-card img {
+  display: block;
+  width: calc(var(--w) * var(--logo-scale));
+  height: calc(var(--h) * var(--logo-scale));
+  max-width: none;
+  object-fit: contain;
+}
+
+.logo-card:hover {
+  border-color: rgba(var(--ds-orange-rgb), 0.35);
+  box-shadow: 0 8px 20px rgba(var(--ds-navy-rgb), 0.08);
+  transform: translateY(-2px);
+}
+
+/* Running state (set by marquee.js) */
+.logo-marquee.is-running {
+  overflow: hidden;
+}
+
+.logo-marquee.is-running .logo-marquee__track {
+  animation: logo-marquee var(--marquee-duration, 50s) linear var(--marquee-delay, 0s) infinite;
+}
+
+.logo-marquee.is-running:hover .logo-marquee__track,
+.logo-marquee.is-paused .logo-marquee__track,
+.logo-marquee.is-offscreen .logo-marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes logo-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(var(--marquee-shift, -50%), 0, 0);
+  }
+}
+
+/* Pause control: appears on keyboard focus (WCAG 2.2.2). */
+.logo-marquee__toggle {
+  position: absolute;
+  top: 50%;
+  right: var(--ds-gutter);
+  z-index: 2;
+  padding: 8px 14px;
+  border: 1px solid var(--ds-border);
+  border-radius: 999px;
+  background: var(--ds-white);
+  color: var(--ds-black);
+  font-size: 13px;
+  font-weight: 600;
+  transform: translateY(-50%);
+  box-shadow: 0 6px 16px rgba(var(--ds-navy-rgb), 0.12);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .trusted {
+    padding: 72px 0 80px;
+  }
+
+  .trusted__title {
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .trusted {
+    padding: 56px 0 64px;
+  }
+
+  .trusted__title {
+    padding-inline: var(--ds-gutter);
+  }
+
+  .trusted__title br {
+    display: none;
+  }
+
+  .logo-marquee {
+    --logo-card-w: 150px;
+    --logo-card-h: 56px;
+    --logo-gap: 12px;
+    --logo-scale: 0.74;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile spacing (< 768): compact vertical rhythm
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .trusted {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+}

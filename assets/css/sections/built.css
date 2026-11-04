@@ -1,0 +1,347 @@
+/* ==========================================================================
+   What We've Built — case-study carousel (Figma image 139)
+   Measured from the Figma frame at 1920px: 1230px cream card, 24px radius,
+   32px padding, two equal columns with a 40px gap, 48px round arrows.
+   ========================================================================== */
+
+.built {
+  --built-orange: #ff6900;
+  --built-card: #f8f4ee;
+  --built-ink: #060717;
+  --built-text: #45556c;
+  --built-muted: #63758f;
+  --built-line: #ebe4df;
+  --built-pad: 32px;
+
+  position: relative;
+  padding: 75px 0 91px;
+  overflow: hidden;
+  /* Stand-in for the dark desk photo in the design (not available as a
+     separate asset): near-black with a soft lift behind the heading. */
+  background:
+    radial-gradient(60% 55% at 50% 0%, #333 0%, rgba(51, 51, 51, 0) 100%),
+    radial-gradient(40% 50% at 100% 100%, #1d1a14 0%, rgba(29, 26, 20, 0) 100%),
+    #0d0d0d;
+  color: var(--ds-white);
+}
+
+.built__inner {
+  width: 100%;
+  max-width: 1294px; /* 1230px card + 32px padding each side */
+  margin-inline: auto;
+  padding-inline: 32px;
+}
+
+/* --------------------------------------------------------------------------
+   Heading
+   -------------------------------------------------------------------------- */
+.built__head {
+  max-width: 680px;
+  margin: 0 auto 55px;
+  text-align: center;
+}
+
+.built__title {
+  margin-bottom: 16px;
+  color: var(--ds-white);
+  font-family: "Sora", var(--ds-font-sans);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.built__accent {
+  color: var(--built-orange);
+}
+
+.built__sub {
+  color: var(--ds-white);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   Card + slides
+   -------------------------------------------------------------------------- */
+.built__carousel {
+  position: relative;
+  padding: var(--built-pad);
+  border-radius: 24px;
+  background: var(--built-card);
+  color: var(--built-ink);
+}
+
+.built__track {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  touch-action: pan-y;
+}
+
+.built__slide {
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
+  align-items: start;
+}
+
+.built__slide.is-active {
+  display: grid;
+  animation: built-in 0.45s ease both;
+}
+
+@keyframes built-in {
+  from { opacity: 0; transform: translateX(var(--built-dir, 16px)); }
+  to { opacity: 1; transform: none; }
+}
+
+.built__media {
+  overflow: hidden;
+  aspect-ratio: 563 / 479;
+  border-radius: 20px;
+}
+
+.built__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.built__media--photo img {
+  object-fit: cover;
+  object-position: 50% 15%;
+}
+
+/* Published case-study artwork is a portrait mock-up with logos along the
+   bottom, so it is shown whole rather than cropped. */
+.built__media--mockup {
+  background: #ece6dd;
+}
+
+.built__media--mockup img {
+  object-fit: contain;
+}
+
+.built__body {
+  min-width: 0;
+}
+
+.built__name {
+  margin-bottom: 12px;
+  color: var(--built-ink);
+  font-family: "Sora", var(--ds-font-sans);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.built__label {
+  margin: 0 0 4px;
+  color: var(--built-orange);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.built__text {
+  margin-bottom: 16px;
+  color: var(--built-text);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.built__label--tags {
+  margin-top: 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--built-line);
+  color: #fd8e06;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.built__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.built__tags li {
+  padding: 5px 12px;
+  border: 1px solid #e9e2da;
+  border-radius: 9999px;
+  background: var(--ds-white);
+  color: #11111d;
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.built__country {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 32px 0 0;
+  color: var(--built-muted);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.built__flag {
+  flex-shrink: 0;
+  width: 50px;
+  height: auto;
+}
+
+.built__flag--globe {
+  width: 22px;
+  color: var(--built-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Arrows (centred on the card, 39px in from each edge as in the design)
+   -------------------------------------------------------------------------- */
+.built__arrow {
+  position: absolute;
+  top: calc(50% + 6px); /* design centres them slightly below the card middle */
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ds-white);
+  color: var(--built-ink);
+  box-shadow: 0 4px 14px rgba(6, 7, 23, 0.16);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.built__arrow--prev { left: 39px; }
+.built__arrow--next { right: 39px; }
+
+.built__arrow:hover {
+  color: var(--built-orange);
+  box-shadow: 0 6px 20px rgba(6, 7, 23, 0.24);
+}
+
+.built__arrow:focus-visible {
+  outline: 2px solid var(--built-orange);
+  outline-offset: 3px;
+}
+
+.built__arrow[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .built__slide.is-active {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Laptop (< 1200): slightly tighter card
+   -------------------------------------------------------------------------- */
+@media (max-width: 1199.98px) {
+  .built__slide {
+    gap: 32px;
+  }
+
+  .built__name {
+    font-size: 28px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet & mobile (< 992): image above text; arrows centred on the image
+   -------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .built {
+    --built-pad: 20px;
+
+    padding: 56px 0 64px;
+  }
+
+  .built__inner {
+    padding-inline: var(--ds-gutter);
+  }
+
+  .built__head {
+    margin-bottom: 36px;
+  }
+
+  .built__title {
+    font-size: 36px;
+  }
+
+  .built__slide {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .built__name {
+    font-size: 24px;
+  }
+
+  /* Card is full width here, so the image height follows the viewport:
+     centre the arrows on it. */
+  .built__arrow {
+    top: calc(var(--built-pad) + (100vw - 2 * var(--ds-gutter) - 2 * var(--built-pad)) * 479 / 563 / 2);
+    width: 44px;
+    height: 44px;
+  }
+
+  .built__arrow--prev { left: calc(var(--built-pad) + 10px); }
+  .built__arrow--next { right: calc(var(--built-pad) + 10px); }
+
+  .built__country {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .built__title {
+    font-size: 30px;
+  }
+
+  .built__sub {
+    font-size: 15px;
+  }
+
+  .built__text {
+    font-size: 15px;
+  }
+
+  .built__tags li {
+    font-size: 13px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile spacing (< 768): compact vertical rhythm
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .built {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .built__head {
+    margin-bottom: 28px;
+  }
+}

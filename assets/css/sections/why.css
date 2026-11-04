@@ -1,0 +1,293 @@
+/* ==========================================================================
+   Section 10 — Why Choose Dotsquares  (Figma 1:1065–1:1074)
+   Figma: eyebrow y 9197 · heading 9232 · lead 9336 · text 9404 ·
+          video 998/9198 679x412 · cards 9657 & 9833 (457/456 x 151) ·
+          next section eyebrow at 10076
+   Top padding = Figma's gap below the Partners & Awards block.
+   ========================================================================== */
+
+.why {
+  padding: 100px 0 92px;
+  background: var(--ds-white);
+  overflow-x: clip;
+}
+
+/* --------------------------------------------------------------------------
+   Intro: copy (left) + video thumbnail (right)
+   -------------------------------------------------------------------------- */
+.why__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 597px) 679px;
+  justify-content: space-between;
+  align-items: start;
+  padding: 0 3px 0 2px;
+}
+
+.why__copy {
+  min-width: 0;
+}
+
+.why__title {
+  margin-top: 13px;
+  color: var(--ds-black);
+  font-size: clamp(1.75rem, 1.2rem + 1.5vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.167;
+}
+
+.why__lead {
+  max-width: 504px;
+  margin-top: 20px;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.why__text {
+  margin-top: 20px;
+  color: #333;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.why__video {
+  margin: 1px 0 0;
+}
+
+.why__video img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 679 / 412;
+  object-fit: cover;
+}
+
+/* The thumbnail (with its orange play button) is a click-to-play button. */
+.why__play {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.why__play:focus-visible {
+  outline: 3px solid var(--ds-orange);
+  outline-offset: 4px;
+}
+
+/* The YouTube player takes the thumbnail's exact box, so nothing shifts. */
+.why__video iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 679 / 412;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Feature cards (3 x 2)
+   -------------------------------------------------------------------------- */
+.why-cards {
+  display: grid;
+  /* Fluid thirds; resolves to Figma's 457/456/456 at the 1440px container. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 25px 33px;
+  margin-top: 47px;
+  padding: 0 3px 0 2px;
+}
+
+.why-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  min-width: 0;
+  min-height: 151px;
+  padding: 33px 20px 20px 19px;
+  border: 1px solid #e9e9e9;
+  border-radius: 6px;
+  background: var(--ds-white);
+  transition:
+    transform 0.3s var(--ds-ease-out),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Exported icon includes its circle + soft shadow (106x106 around an 80px circle). */
+.why-card__icon {
+  flex-shrink: 0;
+  width: 106px;
+  height: 106px;
+  margin: -5px -13px -21px -13px;
+  max-width: none;
+}
+
+.why-card__body {
+  min-width: 0;
+  margin-left: 24px;
+  padding-top: 4px;
+}
+
+.why-card__title {
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.why-card__text {
+  max-width: 342px;
+  margin-top: 8px;
+  color: var(--ds-black);
+  font-size: 16px;
+  line-height: 20px;
+}
+
+/* Figma insets the icon/text 4px further in the 2nd and 3rd columns. */
+@media (min-width: 1400px) {
+  .why-card:nth-child(3n + 2),
+  .why-card:nth-child(3n) {
+    padding-left: 23px;
+  }
+
+  .why-card:nth-child(3n + 2) .why-card__body,
+  .why-card:nth-child(3n) .why-card__body {
+    margin-left: 21px;
+  }
+}
+
+.why-card:hover {
+  border-color: rgba(var(--ds-orange-rgb), 0.35);
+  box-shadow: 0 10px 26px rgba(var(--ds-navy-rgb), 0.08);
+  transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-card {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Laptop (1200–1399)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1399.98px) {
+  .why__intro {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+    column-gap: 48px;
+    padding: 0;
+  }
+
+  .why-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    padding: 0;
+  }
+
+  .why-card {
+    padding: 28px 18px 22px 16px;
+  }
+
+  .why-card__body {
+    margin-left: 18px;
+  }
+
+  .why-card__text {
+    max-width: none;
+  }
+
+  .why-card__text br {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Small laptop / tablet landscape (992–1199)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1199.98px) {
+  .why {
+    padding: 80px 0;
+  }
+
+  .why__intro {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 36px;
+  }
+
+  .why__lead,
+  .why__text {
+    font-size: 17px;
+  }
+
+  .why-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 40px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet portrait & mobile (< 992): video below the copy
+   -------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .why__intro {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 32px;
+  }
+
+  .why__lead {
+    max-width: none;
+  }
+
+  .why__video {
+    width: 100%;
+    max-width: 679px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .why {
+    padding: 64px 0;
+  }
+
+  .why-cards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .why__lead,
+  .why__text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .why-card {
+    min-height: 0;
+    padding: 22px 16px 20px 14px;
+  }
+
+  .why-card__icon {
+    width: 86px;
+    height: 86px;
+    margin: -4px -10px -17px -10px;
+  }
+
+  .why-card__body {
+    margin-left: 14px;
+    padding-top: 2px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile spacing (< 768): compact vertical rhythm
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .why {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+}

@@ -1,0 +1,371 @@
+/* ==========================================================================
+   Section 11 — HubSpot Agent Hub  (Figma 1:1143–1:1212)
+   Figma: eyebrow y 10076 · heading 10111 · intro 10176 (1030 wide) ·
+          illustration 253/10369 732x488 · features 1055/10369 ·
+          panel 242/10942 1435x308 #23455b · CTA 855/11301 · next 11428
+   The previous section already includes the 92px gap above the eyebrow.
+   ========================================================================== */
+
+.agent-hub {
+  padding: 0 0 85px;
+  background: var(--ds-white);
+  overflow-x: clip;
+}
+
+.agent-hub__eyebrow {
+  justify-content: center;
+}
+
+.agent-hub__title {
+  margin-top: 13px;
+}
+
+.agent-hub__intro {
+  max-width: 1030px;
+  margin: 13px auto 0;
+  color: var(--ds-black);
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+}
+
+/* Figma centres the heading at 50% + 7.5px. */
+@media (min-width: 1400px) {
+  .agent-hub__title {
+    transform: translateX(7.5px);
+  }
+
+  .js .agent-hub__title[data-reveal] {
+    transform: translate3d(7.5px, 24px, 0);
+  }
+
+  .js .agent-hub__title[data-reveal].is-visible {
+    transform: translateX(7.5px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Illustration (left) + feature rows (right)
+   -------------------------------------------------------------------------- */
+.agent-hub__layout {
+  display: grid;
+  /* Figma: 732 + 70 + 645 at the 1440px container; shrinks proportionally below. */
+  grid-template-columns: minmax(0, 732fr) minmax(0, 645fr);
+  column-gap: 70px;
+  align-items: start;
+  margin: 73px -20px 0 13px;
+}
+
+.agent-hub__art {
+  margin: 0;
+}
+
+/* <picture> is the element that tilts (see tilt.js), so it must be a box. */
+.agent-hub__art picture {
+  display: block;
+}
+
+.agent-hub__art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 732 / 488;
+  object-fit: contain;
+}
+
+/* Gentle float once the illustration is on screen. */
+.agent-hub__art.is-visible img {
+  animation: agent-float 7s ease-in-out 1s infinite;
+}
+
+.agent-features {
+  display: grid;
+  gap: 50px;
+}
+
+.agent-feature {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  column-gap: 14px;
+  align-items: start;
+}
+
+.agent-feature__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border: 1px solid #ede5e5;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--ds-white) 0%, #e8ebff 100%);
+  box-shadow: 0 8px 18px -5px rgba(250, 106, 1, 0.34);
+  transition:
+    transform 0.3s var(--ds-ease-out),
+    box-shadow 0.3s ease;
+}
+
+.agent-feature__icon img {
+  display: block;
+  max-width: none;
+}
+
+.agent-feature__body {
+  padding-top: 4px;
+}
+
+/* Figma sets the second row 5px lower than the others. */
+.agent-feature--offset .agent-feature__body {
+  padding-top: 9px;
+}
+
+.agent-feature__title {
+  color: var(--ds-black);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 20px;
+  transition: color 0.2s ease;
+}
+
+.agent-feature__text {
+  max-width: 551px;
+  margin-top: 8px;
+  color: var(--ds-black);
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.agent-feature:last-child .agent-feature__text {
+  max-width: 537px;
+}
+
+.agent-feature:hover .agent-feature__icon {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 22px -6px rgba(250, 106, 1, 0.42);
+}
+
+.agent-feature:hover .agent-feature__title {
+  color: var(--ds-orange);
+}
+
+/* --------------------------------------------------------------------------
+   "What is HubSpot Agent Hub?" panel
+   -------------------------------------------------------------------------- */
+.agent-panel {
+  min-height: 308px;
+  margin: 85px 3px 0 2px;
+  padding: 64px 53px 60px;
+  border-radius: 34px;
+  background: #23455b;
+  color: var(--ds-white);
+  text-align: center;
+}
+
+.agent-panel__title {
+  font-size: clamp(1.625rem, 1.15rem + 1.3vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.444;
+}
+
+.agent-panel__text {
+  margin-top: 12px;
+  font-size: clamp(1.0625rem, 0.85rem + 0.6vw, 1.5rem);
+  line-height: 1.25;
+}
+
+.agent-hub__cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 51px;
+}
+
+@keyframes agent-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agent-hub__art.is-visible img {
+    animation: none;
+  }
+
+  .agent-feature__icon,
+  .agent-feature__title {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Laptop (1200–1399)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1399.98px) {
+  .agent-hub__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 48px;
+    margin: 60px 0 0;
+  }
+
+  .agent-features {
+    gap: 40px;
+  }
+
+  .agent-feature__text,
+  .agent-feature:last-child .agent-feature__text {
+    max-width: none;
+  }
+
+  .agent-panel {
+    min-height: 0;
+    margin: 72px 0 0;
+    padding: 52px 44px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Small laptop / tablet landscape (992–1199)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1199.98px) {
+  .agent-hub {
+    padding-bottom: 80px;
+  }
+
+  .agent-hub__layout {
+    column-gap: 32px;
+    align-items: center;
+  }
+
+  .agent-features {
+    gap: 30px;
+  }
+
+  .agent-feature__text {
+    font-size: 15px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet portrait & mobile (< 992): illustration above the feature rows
+   -------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .agent-hub__layout {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 36px;
+    margin-top: 44px;
+  }
+
+  .agent-hub__art {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .agent-panel {
+    margin-top: 56px;
+    padding: 40px 28px;
+    border-radius: 28px;
+  }
+
+  .agent-hub__cta {
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .agent-hub {
+    padding-bottom: 64px;
+  }
+
+  .agent-hub__intro {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .agent-feature {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+
+  .agent-feature__icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .agent-feature__icon img {
+    transform: scale(0.8);
+  }
+
+  .agent-feature__body,
+  .agent-feature--offset .agent-feature__body {
+    padding-top: 2px;
+  }
+
+  .agent-feature__title {
+    font-size: 17px;
+  }
+
+  .agent-feature__text {
+    line-height: 21px;
+  }
+
+  .agent-panel {
+    margin-top: 44px;
+    padding: 32px 18px;
+    border-radius: 24px;
+  }
+
+  .agent-panel__text {
+    line-height: 1.45;
+  }
+
+  .agent-hub__cta {
+    margin-top: 32px;
+  }
+
+  .agent-hub__cta .ds-btn {
+    width: 100%;
+    max-width: 340px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile spacing (< 768): compact vertical rhythm
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .agent-hub {
+    padding-bottom: 40px;
+  }
+
+  .agent-panel {
+    margin-top: 32px;
+  }
+
+  .agent-hub__cta {
+    margin-top: 24px;
+  }
+}
+
+/* ---- Polish pass: flat icon discs ---- */
+.agent-feature__icon {
+  border-color: #f3dcc8;
+  background: #fff4ea;
+  box-shadow: none;
+}
+
+.agent-feature:hover .agent-feature__icon {
+  box-shadow: none;
+}
+
+.agent-hub__art picture,
+.agent-hub__art img {
+  border-radius: 20px;
+}
+
+/* the product illustration is static: no floating */
+.agent-hub__art.is-visible img {
+  animation: none;
+}

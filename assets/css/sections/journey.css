@@ -1,0 +1,876 @@
+/* ==========================================================================
+   Section 7 — The HubSpot Journey  (Figma 1:16 background, 1:540 content)
+   Figma: section y 3996–5378 · eyebrow 4098 · heading 4133 · intro 4247 ·
+          tabs 4353 (895 wide) · diagram 4540–5180 · panel 1178/4353 499x925
+   ========================================================================== */
+
+.journey {
+  padding: 102px 0 100px;
+  background: #fffaf3; /* Figma: rgba(255, 249, 240, 0.86) over white */
+  overflow-x: clip;
+}
+
+.journey__eyebrow {
+  justify-content: center;
+}
+
+.journey__title {
+  margin-top: 13px;
+}
+
+.journey__intro {
+  margin: 10px auto 0;
+  color: var(--ds-black);
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.journey__layout {
+  display: grid;
+  grid-template-columns: 895px 499px;
+  justify-content: space-between;
+  align-items: start;
+  margin-top: 46px;
+  padding: 0 3px 0 2px;
+}
+
+.journey__main {
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Stage tabs (Figma: 108x137 cards, 23px gap, numbered badges overlapping)
+   -------------------------------------------------------------------------- */
+.journey-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 108px));
+  justify-content: space-between;
+  padding-top: 15px;
+}
+
+/* Dashed orange line running behind the tabs (Figma Line 7, y +84). */
+.journey-tabs::before {
+  content: "";
+  position: absolute;
+  top: 84px;
+  left: 110px;
+  right: 108px;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--ds-orange) 0 6.045px, transparent 6.045px 12.09px) 3.02px 0 / auto 1px;
+}
+
+.journey-tab {
+  position: relative;
+  height: 137px;
+  padding: 0;
+  border: 1px solid #f2f2f2;
+  border-radius: 22px;
+  background: var(--ds-white);
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+  color: var(--ds-black);
+  cursor: pointer;
+  transition:
+    transform 0.3s var(--ds-ease-out),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.journey-tab:hover {
+  border-color: rgba(var(--ds-orange-rgb), 0.45);
+  transform: translateY(-3px);
+}
+
+.journey-tab.is-active {
+  border-color: var(--ds-orange);
+  background: linear-gradient(38.07deg, #fff 0.13%, #fffefc 50.48%, #ffedd4 99.87%);
+  box-shadow: 0 6px 18px rgba(var(--ds-orange-rgb), 0.14);
+}
+
+.journey-tab:focus-visible {
+  outline: 2px solid var(--ds-orange);
+  outline-offset: 3px;
+}
+
+.journey-tab__num {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  margin-left: -17.5px;
+  border: 1px solid rgba(var(--ds-orange-rgb), 0.47);
+  border-radius: 50%;
+  background: var(--ds-white);
+  color: var(--ds-orange);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 22px;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.journey-tab.is-active .journey-tab__num {
+  background: var(--ds-orange);
+  color: var(--ds-white);
+}
+
+.journey-tab__icon {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+}
+
+.journey-tab__icon img {
+  display: block;
+  max-width: none;
+}
+
+.journey-tab__label {
+  position: absolute;
+  top: 94px;
+  left: 0;
+  right: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Hub diagram — positioned in % of Figma's 895x747 artboard (Figma 640 + Data Hub card; lower row mirrors the upper row around the hub centre y=385) so it scales.
+   -------------------------------------------------------------------------- */
+.journey-map {
+  position: relative;
+  margin-top: 35px;
+  aspect-ratio: 895 / 747;
+  container-type: inline-size;
+}
+
+.journey-map__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.journey-map__ring {
+  fill: rgba(255, 246, 241, 0.77);
+  stroke: #e6dad3;
+  stroke-width: 1;
+  stroke-dasharray: 6 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.journey-map__pulse {
+  stroke: rgba(var(--ds-orange-rgb), 0.3);
+  vector-effect: non-scaling-stroke;
+}
+
+.journey-link {
+  fill: none;
+  stroke: #cdc8c8;
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 0.35s ease;
+}
+
+.journey-link.is-active {
+  stroke: var(--ds-orange);
+  stroke-width: 1.5;
+}
+
+.journey-card {
+  position: absolute;
+  top: calc(var(--y) / 747 * 100%);
+  left: calc(var(--x) / 895 * 100%);
+  display: flex;
+  align-items: center;
+  gap: 1.56cqw;
+  width: calc(237 / 895 * 100%);
+  height: calc(117 / 747 * 100%);
+  padding-left: 2.12cqw;
+  border: 1px solid transparent;
+  border-radius: 17px;
+  background: var(--ds-white);
+  box-shadow: 0 0 19px rgba(252, 111, 1, 0.18);
+  cursor: pointer;
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s var(--ds-ease-out);
+}
+
+.journey-card:hover {
+  transform: translateY(-3px);
+}
+
+.journey-card.is-active {
+  border-color: var(--ds-orange);
+  background: linear-gradient(38.07deg, #fff 0.13%, #fffefc 50.48%, #ffedd4 99.87%);
+  box-shadow: 0 6px 26px rgba(252, 111, 1, 0.26);
+}
+
+.journey-card__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: max(40px, 6.704cqw);
+  height: max(40px, 6.704cqw);
+  border-radius: 50%;
+  background: #ffedd4;
+}
+
+.journey-card__icon img {
+  display: block;
+  max-width: 70%;
+  height: auto;
+}
+
+.journey-card__label {
+  color: var(--ds-black);
+  font-size: max(12px, 2.011cqw);
+  font-weight: 500;
+  line-height: 1.22;
+}
+
+/* Centre: dashed ring (SVG) + glowing white disc + orange HubSpot badge. */
+.journey-hub {
+  position: absolute;
+  top: calc(277 / 747 * 100%);
+  left: calc(339 / 895 * 100%);
+  width: calc(216 / 895 * 100%);
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+
+.journey-hub__disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--ds-white);
+  box-shadow: 0 0 38px rgba(252, 111, 1, 0.26);
+  transition: box-shadow 0.35s ease;
+}
+
+.journey-hub.is-active .journey-hub__disc {
+  box-shadow:
+    0 0 0 2px var(--ds-orange),
+    0 0 44px rgba(252, 111, 1, 0.4);
+}
+
+.journey-hub__badge {
+  position: absolute;
+  top: -11.1%;
+  left: 36.1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27.78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--ds-orange);
+}
+
+.journey-hub__badge img {
+  width: 50%;
+  height: auto;
+}
+
+.journey-hub__logo {
+  position: absolute;
+  top: 40.28%;
+  left: 12.5%;
+  width: 75.46%;
+  height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Details panel (Figma: 499x925, 32px radius, #fde3d6 border, orange glow)
+   -------------------------------------------------------------------------- */
+.journey-panel {
+  min-width: 0;
+  min-height: 925px;
+  padding: 28px 30px 24px 27px;
+  border: 1px solid #fde3d6;
+  border-radius: 32px;
+  background: var(--ds-white);
+  box-shadow: 0 2px 27px rgba(252, 111, 1, 0.12);
+}
+
+.journey-panel:focus-visible {
+  outline: 2px solid var(--ds-orange);
+  outline-offset: 4px;
+}
+
+.journey-panel__content {
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.journey-panel__content.is-switching {
+  opacity: 0;
+  transform: translate3d(0, 6px, 0);
+}
+
+.journey-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+/* Figma sits the stage/title block 4px below the icon's centre line. */
+.journey-panel__head > div {
+  padding-top: 8px;
+}
+
+.journey-panel__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--ds-orange);
+}
+
+/* Stage icons are orange artwork; render them white on the orange disc. */
+.journey-panel__icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.journey-panel__stage {
+  color: var(--ds-orange-alt);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  text-transform: uppercase;
+}
+
+.journey-panel__title {
+  margin-top: 4px;
+  color: var(--ds-black);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.22;
+}
+
+.journey-panel__desc {
+  max-width: 444px;
+  margin: 19px 0 0 1px;
+  color: var(--ds-black);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.journey-features {
+  display: grid;
+  gap: 19px;
+  margin: 21px 0 0 4px;
+}
+
+.journey-feature {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 88px;
+  padding: 12px 16px 12px 136px;
+  border-radius: 12px;
+  background: var(--ds-white);
+  box-shadow: 0 1px 16px rgba(252, 111, 1, 0.14);
+}
+
+.journey-feature__check {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  margin-top: -16px;
+}
+
+.journey-feature__icon {
+  position: absolute;
+  top: 50%;
+  left: 59px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin-top: -30px;
+  border-radius: 50%;
+  background: #ffedd4;
+}
+
+.journey-feature__text {
+  color: var(--ds-black);
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.journey-feature__text strong {
+  font-weight: 600;
+}
+
+.journey-handoff {
+  position: relative;
+  min-height: 169px;
+  margin: 22px 0 0 4px;
+  padding: 31px 18px 20px 99px;
+  border: 1px solid #f5d2b7;
+  border-radius: 12px;
+  background: #fef5f0;
+}
+
+.journey-handoff__icon {
+  position: absolute;
+  top: 31px;
+  left: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #fbece3;
+}
+
+.journey-handoff__icon img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.journey-handoff__title {
+  color: var(--ds-orange-alt);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  text-transform: uppercase;
+}
+
+.journey-handoff__text {
+  margin-top: 4px;
+  color: var(--ds-black);
+  font-size: 16px;
+  line-height: 22px;
+}
+
+/* --------------------------------------------------------------------------
+   Motion
+   -------------------------------------------------------------------------- */
+.js .journey-map[data-reveal] .journey-card,
+.js .journey-map[data-reveal] .journey-hub {
+  opacity: 0;
+  transform: scale(0.94);
+}
+
+.journey-map.is-visible .journey-card,
+.journey-map.is-visible .journey-hub {
+  animation: journey-pop 0.6s var(--ds-ease-out) calc(0.1s + var(--i, 0) * 0.09s) forwards;
+}
+
+.js .journey-map[data-reveal] .journey-link {
+  opacity: 0;
+}
+
+.js .journey-map.is-visible .journey-link {
+  opacity: 1;
+  transition:
+    opacity 0.6s ease 0.6s,
+    stroke 0.35s ease;
+}
+
+/* Ambient: the dashed ring drifts slowly; the active connector flows. */
+.is-visible .journey-map__ring {
+  animation: journey-dash 30s linear infinite;
+}
+
+.is-visible .journey-link.is-active {
+  animation: journey-dash-fast 1s linear infinite;
+}
+
+.is-visible .journey-map__pulse {
+  animation: journey-pulse 3.4s ease-out 1.2s infinite;
+}
+
+.dg.is-paused .journey-map__ring,
+.dg.is-paused .journey-link,
+.dg.is-paused .journey-map__pulse {
+  animation-play-state: paused;
+}
+
+.journey-panel__content.is-entering .journey-feature,
+.journey-panel__content.is-entering .journey-handoff {
+  animation: journey-feature-in 0.45s var(--ds-ease-out) both;
+}
+
+.journey-panel__content.is-entering .journey-feature:nth-child(2) { animation-delay: 0.04s; }
+.journey-panel__content.is-entering .journey-feature:nth-child(3) { animation-delay: 0.08s; }
+.journey-panel__content.is-entering .journey-feature:nth-child(4) { animation-delay: 0.12s; }
+.journey-panel__content.is-entering .journey-feature:nth-child(5) { animation-delay: 0.16s; }
+.journey-panel__content.is-entering .journey-handoff { animation-delay: 0.2s; }
+
+@keyframes journey-pop {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes journey-dash {
+  to {
+    stroke-dashoffset: -110;
+  }
+}
+
+@keyframes journey-dash-fast {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+@keyframes journey-pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.32);
+  }
+}
+
+@keyframes journey-feature-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .journey-map[data-reveal] .journey-card,
+  .js .journey-map[data-reveal] .journey-hub,
+  .js .journey-map[data-reveal] .journey-link {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .is-visible .journey-map__ring,
+  .is-visible .journey-link.is-active,
+  .is-visible .journey-map__pulse {
+    animation: none;
+  }
+
+  .journey-panel__content,
+  .journey-tab,
+  .journey-card {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Laptop (1200–1399): fluid tabs and diagram, narrower panel
+   -------------------------------------------------------------------------- */
+@media (max-width: 1399.98px) {
+  .journey__intro br {
+    display: none;
+  }
+
+  .journey__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+    column-gap: 32px;
+    padding: 0;
+  }
+
+  .journey-tabs {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    column-gap: 10px;
+  }
+
+  .journey-tabs::before {
+    left: 7%;
+    right: 7%;
+  }
+
+  .journey-tab__icon img {
+    transform: scale(0.85);
+  }
+
+  .journey-panel {
+    min-height: 0;
+    padding: 24px 22px 22px;
+  }
+
+  .journey-features,
+  .journey-handoff {
+    margin-left: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet (768–1199): diagram on top, panel below
+   -------------------------------------------------------------------------- */
+@media (max-width: 1199.98px) {
+  .journey {
+    padding: 80px 0;
+  }
+
+  .journey__layout {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 40px;
+    margin-top: 40px;
+  }
+
+  .journey__main {
+    width: 100%;
+    max-width: 895px;
+    margin-inline: auto;
+  }
+
+  .journey-panel {
+    width: 100%;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile (< 768): swipeable tab strip, diagram as a simple grid
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .journey {
+    padding: 64px 0;
+  }
+
+  .journey__intro {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .journey-tabs {
+    display: flex;
+    gap: 12px;
+    margin-inline: calc(var(--ds-gutter) * -1);
+    padding: 18px var(--ds-gutter) 10px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--ds-gutter);
+    scrollbar-width: none;
+  }
+
+  .journey-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .journey-tabs::before {
+    display: none;
+  }
+
+  .journey-tab {
+    flex: 0 0 92px;
+    height: 120px;
+    scroll-snap-align: start;
+  }
+
+  .journey-tab__icon {
+    top: 54px;
+  }
+
+  .journey-tab__icon img {
+    transform: scale(0.75);
+  }
+
+  .journey-tab__label {
+    top: 84px;
+    font-size: 13px;
+  }
+
+  .journey-map {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+    aspect-ratio: auto;
+  }
+
+  .journey-map__lines {
+    display: none;
+  }
+
+  .journey-hub {
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 170px;
+    margin: 22px 0 10px;
+  }
+
+  .journey-card {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    height: auto;
+    min-height: 76px;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .journey-card[data-map-key="marketing"],
+  .journey-card[data-map-key="data"] {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 6px);
+  }
+
+  .journey-card__label {
+    font-size: 15px;
+  }
+
+  .journey-panel {
+    padding: 20px 14px 16px;
+    border-radius: 24px;
+  }
+
+  .journey-panel__icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .journey-panel__icon img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .journey-panel__head {
+    gap: 14px;
+  }
+
+  .journey-panel__stage {
+    font-size: 14px;
+  }
+
+  .journey-panel__title {
+    font-size: 24px;
+  }
+
+  .journey-features {
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .journey-feature {
+    min-height: 76px;
+    padding: 12px 12px 12px 102px;
+  }
+
+  .journey-feature__check {
+    left: 10px;
+    width: 26px;
+    height: 26px;
+    margin-top: -13px;
+  }
+
+  .journey-feature__icon {
+    left: 44px;
+    width: 48px;
+    height: 48px;
+    margin-top: -24px;
+  }
+
+  .journey-feature__icon img {
+    width: 19px;
+    height: auto;
+  }
+
+  .journey-feature__text {
+    font-size: 15px;
+    line-height: 21px;
+  }
+
+  /* Let the text flow naturally instead of breaking after the bold lead-in. */
+  .journey-feature__text br {
+    display: none;
+  }
+
+  .journey-feature__text strong::after {
+    content: " ";
+  }
+
+  .journey-handoff {
+    min-height: 0;
+    padding: 18px 14px 18px 84px;
+  }
+
+  .journey-handoff__icon {
+    top: 18px;
+    left: 12px;
+    width: 58px;
+    height: 58px;
+  }
+
+  .journey-handoff__icon img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .journey-handoff__title,
+  .journey-handoff__text {
+    font-size: 15px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile spacing (< 768): compact vertical rhythm
+   -------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .journey {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+}
+
+/* ---- Polish pass: one icon per feature row ---- */
+.journey-feature {
+  min-height: 76px;
+  padding-left: 66px;
+}
+
+.journey-feature__icon {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .journey-feature {
+    min-height: 0;
+    padding-left: 52px;
+  }
+}

@@ -1,0 +1,499 @@
+/* ==========================================================================
+   HubSpot services — coverflow slider.
+   The centre card "pops" (scaled up, brand-orange gradient); neighbours sit behind
+   it, smaller, dimmed and slightly turned. Positions are driven by --d
+   (signed distance from the active card) and --a (its absolute value),
+   both set by services.js.
+   ========================================================================== */
+
+.services {
+  --svc-navy: #0e1e36; /* site navy (--ds-navy-rgb) */
+  /* Active card = the Journey section's active-card look: white fading into a warm tint. */
+  --svc-orange-grad: linear-gradient(38deg, #fff 0%, #fffaf2 42%, #ffe6c8 100%);
+  --svc-ease: cubic-bezier(0.45, 0.05, 0.2, 1); /* smooth in-out for the endless loop */
+  --svc-card-w: 292px;
+  --svc-step: 338px; /* centre card -> first neighbour (small = tight gap) */
+  --svc-step2: 272px; /* first neighbour -> outer card */
+  /* How far the outermost visible card reaches from the centre (arrows sit beyond it). */
+  --svc-reach: calc(var(--svc-step) + var(--svc-step2) + var(--svc-card-w) * 0.4);
+  --svc-zoom: 1.2; /* how much the centre card pops */
+
+  padding: 88px 0 80px;
+  margin-bottom: 103px; /* white gap before "The Right HubSpot Solution" */
+  background: #fffaf3; /* same soft cream as the Journey section */
+  overflow-x: clip;
+}
+
+.services__intro {
+  max-width: 740px;
+  margin: 12px auto 0;
+  color: var(--ds-text-muted);
+  font-size: 18px;
+  line-height: 26px;
+  text-align: center;
+}
+
+.services__stage {
+  position: relative;
+  margin-top: 40px;
+  padding: 62px 0 50px;
+  touch-action: pan-y;
+  outline: none;
+}
+
+.services__stage:focus-visible {
+  outline: 3px solid var(--ds-orange);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+/* All cards share one grid cell, so the stage is as tall as the tallest. */
+.services__track {
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* --------------------------------------------------------------------------
+   Card
+   -------------------------------------------------------------------------- */
+.svc-card {
+  --d: 0; /* signed distance from the active card */
+  --a: 0; /* |d| */
+  --s: 0; /* sign of d */
+  --svc-dot: var(--ds-orange);
+
+  position: relative;
+  grid-area: 1 / 1;
+  z-index: calc(10 - var(--a));
+  display: flex;
+  flex-direction: column;
+  width: var(--svc-card-w);
+  padding: 20px 18px 24px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(var(--ds-orange-rgb), 0.16);
+  background-color: var(--ds-white);
+  color: var(--svc-navy);
+  box-shadow:
+    0 0 19px rgba(var(--ds-orange-rgb), 0.14),
+    0 14px 30px rgba(var(--ds-navy-rgb), 0.08);
+  cursor: pointer;
+  /* Flat 2-D coverflow (no 3-D tilt) keeps text sharp while the cards move. */
+  opacity: 1;
+  transform:
+    translate3d(
+      calc(var(--s) * (var(--svc-step) + (var(--a) - 1) * var(--svc-step2))),
+      0,
+      0
+    )
+    scale(calc(0.9 - var(--a) * 0.05));
+  transition:
+    transform 0.8s var(--svc-ease),
+    opacity 0.6s ease,
+    border-color 0.6s ease,
+    box-shadow 0.6s ease;
+}
+
+/* Orange gradient fades in over the navy when the card becomes active. */
+.svc-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--svc-orange-grad);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.svc-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Centre card: the "pop". */
+.svc-card.is-active {
+  --svc-dot: var(--ds-orange);
+
+  cursor: default;
+  border-color: var(--ds-orange);
+  box-shadow:
+    0 22px 48px rgba(var(--ds-orange-rgb), 0.28),
+    0 0 0 4px rgba(var(--ds-orange-rgb), 0.1);
+  transform: translate3d(0, -10px, 0) scale(var(--svc-zoom));
+}
+
+.svc-card.is-active::before {
+  opacity: 1;
+}
+
+/* Cards more than two places away wait out of sight (they fade as they slide). */
+.svc-card.is-far {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.svc-card__label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+/* Illustration panel — soft cream so the orange artwork reads on any card. */
+.svc-card__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 164px;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: 8px;
+  color: var(--svc-navy);
+  background: linear-gradient(160deg, #fffaf4 0%, #fff0e0 100%);
+}
+
+.svc-card__media svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.svc-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.svc-card__media--logo img {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  transition: transform 0.7s var(--ds-ease-out);
+}
+
+.svc-card.is-active .svc-card__media--logo img {
+  transform: scale(1.12) rotate(-6deg);
+}
+
+.svc-card__title {
+  margin-top: 18px;
+  font-size: 17.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.svc-card__list {
+  display: grid;
+  gap: 9px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.svc-card__list li {
+  position: relative;
+  padding-left: 17px;
+}
+
+.svc-card__list li::before {
+  content: "";
+  position: absolute;
+  top: 0.5em;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--svc-dot);
+  transition: background-color 0.45s ease;
+}
+
+/* A little life in the active card's artwork (only the centre card moves). */
+.svc-flow {
+  stroke-dasharray: 5 6;
+}
+
+.svc-bob,
+.svc-spin,
+.svc-pulse,
+.svc-twinkle,
+.svc-packet,
+.svc-grow,
+.svc-needle {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.svc-card.is-active .svc-flow {
+  animation: svc-flow 1.4s linear infinite;
+}
+
+.svc-card.is-active .svc-bob {
+  animation: svc-bob 3.6s ease-in-out calc(var(--d, 0s) * -1) infinite;
+}
+
+.svc-card.is-active .svc-spin {
+  animation: svc-spin 9s linear infinite;
+}
+
+.svc-card.is-active .svc-pulse {
+  animation: svc-pulse 2.4s ease-out infinite;
+}
+
+.svc-card.is-active .svc-twinkle {
+  animation: svc-twinkle 2.2s ease-in-out calc(var(--d, 0s) * -1) infinite;
+}
+
+.svc-card.is-active .svc-packet {
+  animation: svc-packet 2.2s ease-in-out calc(var(--d, 0s) * -1) infinite;
+}
+
+.svc-card.is-active .svc-grow {
+  transform-origin: bottom;
+  animation: svc-grow 0.9s var(--ds-ease-out) calc(0.15s + var(--d, 0s)) both;
+}
+
+.svc-card.is-active .svc-needle {
+  transform-origin: 62px 98px;
+  animation: svc-needle 3.2s ease-in-out infinite;
+}
+
+@keyframes svc-flow {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+@keyframes svc-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -4px;
+  }
+}
+
+@keyframes svc-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes svc-pulse {
+  0% {
+    opacity: 1;
+    scale: 1;
+  }
+
+  70%,
+  100% {
+    opacity: 0;
+    scale: 1.45;
+  }
+}
+
+@keyframes svc-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    scale: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+    scale: 1.15;
+  }
+}
+
+@keyframes svc-packet {
+  0%,
+  100% {
+    translate: 0 0;
+    opacity: 0;
+  }
+
+  15%,
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    translate: 44px 0;
+  }
+}
+
+@keyframes svc-grow {
+  from {
+    scale: 1 0.1;
+  }
+}
+
+@keyframes svc-needle {
+  0%,
+  100% {
+    rotate: -8deg;
+  }
+
+  50% {
+    rotate: 10deg;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Controls
+   -------------------------------------------------------------------------- */
+.services__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.services__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 30;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 1px solid #e6e6ee;
+  border-radius: 50%;
+  background: var(--ds-white);
+  color: var(--svc-navy);
+  box-shadow: 0 6px 18px rgba(7, 7, 43, 0.12);
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s var(--ds-ease-out);
+}
+
+/* Sit just outside the outermost card (never past the stage edge). */
+.services__nav--prev {
+  left: max(0px, calc(50% - var(--svc-reach) - 62px));
+}
+
+.services__nav--next {
+  right: max(0px, calc(50% - var(--svc-reach) - 62px));
+}
+
+.services__nav:hover {
+  background: var(--ds-orange);
+  color: var(--ds-white);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.services__nav:focus-visible {
+  outline: 3px solid var(--ds-orange);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+/* Below 1400px the outer pair no longer fits: centre + immediate neighbours. */
+@media (max-width: 1399.98px) {
+  .services {
+    --svc-reach: calc(var(--svc-step) + var(--svc-card-w) * 0.425);
+  }
+
+  .svc-card.is-edge {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 1099.98px) {
+  .services {
+    --svc-card-w: 270px;
+    --svc-step: 288px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .services {
+    --svc-card-w: min(292px, 74vw);
+    --svc-step: calc(var(--svc-card-w) * 0.9);
+    --svc-step2: calc(var(--svc-card-w) * 0.8);
+
+    padding-bottom: 72px;
+  }
+
+  .services__intro {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .svc-card.is-active {
+    transform: translate3d(0, -6px, 40px) scale(1.1);
+  }
+
+  /* Arrows would cover the card; swipe and dots take over on phones. */
+  .services__nav {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-card.is-active .svc-flow,
+  .svc-card.is-active .svc-bob,
+  .svc-card.is-active .svc-spin,
+  .svc-card.is-active .svc-pulse,
+  .svc-card.is-active .svc-twinkle,
+  .svc-card.is-active .svc-packet,
+  .svc-card.is-active .svc-grow,
+  .svc-card.is-active .svc-needle {
+    animation: none;
+  }
+}
+
+/* Call to action under the slider */
+.services__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.services__cta-text {
+  max-width: 520px;
+  margin: 0;
+  color: #333;
+  font-size: 17px;
+  line-height: 26px;
+}
+
+@media (max-width: 575.98px) {
+  .services__cta-text {
+    font-size: 15.5px;
+    line-height: 24px;
+  }
+}
+
+/* ---- Polish pass: calmer cards ---- */
+.svc-card.is-active {
+  box-shadow: 0 26px 50px -24px rgba(var(--ds-navy-rgb), 0.35);
+}
+
+.svc-card.is-active .svc-bob,
+.svc-card.is-active .svc-spin,
+.svc-card.is-active .svc-pulse,
+.svc-card.is-active .svc-twinkle,
+.svc-card.is-active .svc-needle {
+  animation: none;
+}
