@@ -19,6 +19,8 @@
   --svc-zoom: 1.2; /* how much the centre card pops */
 
   padding: 88px 0 80px;
+  /* Nav jump: land with the heading just under the header, so the cards show too. */
+  scroll-margin-top: -86px;
   margin-bottom: 103px; /* white gap before "The Right HubSpot Solution" */
   background: #fffaf3; /* same soft cream as the Journey section */
   overflow-x: clip;
