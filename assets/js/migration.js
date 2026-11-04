@@ -24,10 +24,11 @@
 (function (DS) {
   "use strict";
 
-  // How long each step is held (ms), index = step. The five holds plus the
-  // tile swap (SWITCH_MS) add up to 2000, so a new category starts every 2 s.
-  var SWITCH_MS = 220;
-  var HOLD = [250, 300, 300, 350, 580];
+  // How long each step is held (ms), index = step: tools appear, Mapped,
+  // De-duplicated, Validated, Live. Together with the tile swap (SWITCH_MS)
+  // one category takes about 3 s, each step visible for roughly half a second.
+  var SWITCH_MS = 180;
+  var HOLD = [300, 500, 500, 500, 900];
 
   function colsFor(n) {
     if (n <= 3) return n;
@@ -52,11 +53,18 @@
     this.switchTimer = null;
     this.paused = false;
     this.inView = false;
+    this.overChips = false; // pointer is on the chip strip: stay on that category
 
-    var initial = this.tabs.findIndex(function (t) {
-      return t.getAttribute("aria-selected") === "true";
+    // Always open on the first category (the markup ships a different one).
+    this.index = 0;
+    this.tabs.forEach(function (tab, i) {
+      var on = i === 0;
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+      tab.tabIndex = on ? 0 : -1;
+      tab.classList.toggle("is-active", on);
     });
-    this.index = initial < 0 ? 0 : initial;
+    if (this.tabs[0]) this.stage.setAttribute("aria-labelledby", this.tabs[0].id);
+    if (this.categories[0]) this.renderTiles(this.categories[0]);
 
     this.bind();
     this.setStep(this.autoplay ? 0 : 4);
@@ -65,7 +73,22 @@
 
   Migration.prototype.bind = function () {
     var self = this;
+    // Hovering a chip with a mouse opens it (no click needed); the story plays
+    // out on that category and the loop moves on once the pointer leaves.
+    if (this.tabs.length) {
+      var strip = this.tabs[0].parentNode;
+      strip.addEventListener("mouseleave", function () {
+        self.overChips = false;
+        self.schedule();
+      });
+    }
+
     this.tabs.forEach(function (tab, i) {
+      tab.addEventListener("pointerenter", function (e) {
+        if (e.pointerType !== "mouse") return;
+        self.overChips = true;
+        if (i !== self.index) self.select(i);
+      });
       tab.addEventListener("click", function () {
         self.select(i);
       });
@@ -172,7 +195,7 @@
       if (self.step < 4) {
         self.setStep(self.step + 1);
         self.schedule();
-      } else {
+      } else if (!self.overChips) {
         self.select((self.index + 1) % self.categories.length);
       }
     }, HOLD[this.step]);

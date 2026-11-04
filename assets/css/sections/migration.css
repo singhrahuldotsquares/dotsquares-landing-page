@@ -216,7 +216,7 @@
     opacity 0.2s ease,
     transform 0.2s ease;
   animation:
-    mg-tile-in 0.55s var(--ds-ease-out) calc(var(--n, 0) * 55ms) both,
+    mg-tile-in 0.4s var(--ds-ease-out) calc(var(--n, 0) * 30ms) both,
     mg-bob 5s ease-in-out calc(0.8s + var(--n, 0) * 0.3s) infinite;
 }
 
@@ -277,7 +277,7 @@
   color: #fff;
   box-shadow: 0 6px 12px -4px rgba(var(--ds-orange-rgb), 0.8);
   transform: scale(0);
-  transition: transform 0.45s var(--ds-ease-out) calc(var(--n, 0) * 70ms);
+  transition: transform 0.3s var(--ds-ease-out) calc(var(--n, 0) * 35ms);
 }
 
 .migration[data-step="3"] .mg-tile__ok,
@@ -291,7 +291,7 @@
   flex-direction: column;
   justify-content: space-evenly;
   padding: 40px 0 8px;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 }
 
 .migration[data-step="0"] .mg-flow {
@@ -462,9 +462,9 @@
   font-weight: 600;
   line-height: 1.2;
   transition:
-    border-color 0.4s ease calc(var(--k, 0) * 0.13s),
-    color 0.4s ease calc(var(--k, 0) * 0.13s),
-    background-color 0.4s ease calc(var(--k, 0) * 0.13s);
+    border-color 0.25s ease calc(var(--k, 0) * 0.06s),
+    color 0.25s ease calc(var(--k, 0) * 0.06s),
+    background-color 0.25s ease calc(var(--k, 0) * 0.06s);
 }
 
 .mg-record__tick {
@@ -477,9 +477,9 @@
   border-radius: 50%;
   color: transparent;
   transition:
-    background-color 0.35s ease calc(var(--k, 0) * 0.13s),
-    border-color 0.35s ease calc(var(--k, 0) * 0.13s),
-    color 0.35s ease calc(var(--k, 0) * 0.13s),
+    background-color 0.25s ease calc(var(--k, 0) * 0.06s),
+    border-color 0.25s ease calc(var(--k, 0) * 0.06s),
+    color 0.25s ease calc(var(--k, 0) * 0.06s),
     transform 0.45s var(--ds-ease-out) calc(var(--k, 0) * 0.13s);
 }
 
@@ -507,32 +507,9 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   margin: 22px 0 0;
-  padding: 0 0 16px;
+  padding: 0;
   list-style: none;
   counter-reset: mg;
-}
-
-/* progress bar under the steps */
-.mg-steps::before,
-.mg-steps::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 4px;
-  border-radius: 4px;
-}
-
-.mg-steps::before {
-  right: 0;
-  background: rgba(var(--ds-orange-rgb), 0.14);
-}
-
-.mg-steps::after {
-  width: var(--mg-progress);
-  background: var(--ds-gradient);
-  box-shadow: 0 0 12px rgba(var(--ds-orange-rgb), 0.6);
-  transition: width 0.7s var(--ds-ease-out);
 }
 
 .mg-step {
@@ -545,9 +522,9 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.78);
   transition:
-    border-color 0.4s ease,
-    background-color 0.4s ease,
-    box-shadow 0.4s ease;
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .mg-step__icon {
@@ -561,11 +538,6 @@
   border-radius: 50%;
   background: var(--ds-white);
   color: var(--mg-orange);
-  transition:
-    background 0.4s ease,
-    color 0.4s ease,
-    border-color 0.4s ease,
-    transform 0.4s var(--ds-ease-out);
 }
 
 .mg-step__text {
@@ -597,6 +569,9 @@
   border-color: var(--mg-orange);
   background: var(--ds-gradient);
   color: #fff;
+  /* Only fade in; when a new category resets the steps they snap back, so the
+     glyph never passes through a white-on-white frame. */
+  transition: border-color 0.25s ease;
 }
 
 .mg-step.is-now {
@@ -857,7 +832,7 @@
 }
 
 .mg-tile {
-  animation: mg-tile-in 0.55s var(--ds-ease-out) calc(var(--n, 0) * 55ms) both;
+  animation: mg-tile-in 0.4s var(--ds-ease-out) calc(var(--n, 0) * 30ms) both;
 }
 
 .mg-hub__ring {
