@@ -39,6 +39,11 @@
       self.slots[slot.getAttribute("data-j")] = slot;
     });
     this.timer = null;
+    this.tablist = DS.qs(".journey-tabs", root);
+    this.delay = parseInt(root.getAttribute("data-autoplay"), 10) || 0;
+    this.auto = null;
+    this.paused = false;
+    this.inView = false;
 
     var initial = this.tabs.findIndex(function (t) {
       return t.getAttribute("aria-selected") === "true";
@@ -47,6 +52,7 @@
 
     this.bind();
     this.applyState(this.index);
+    this.setupAutoplay();
   }
 
   Journey.prototype.bind = function () {
@@ -134,11 +140,87 @@
     s.handoffText.textContent = stage.handoff.text;
   };
 
+  // Steps through the tabs on its own while the section is on screen. It
+  // pauses while the details panel is hovered or a control has keyboard
+  // focus, and never runs under prefers-reduced-motion.
+  Journey.prototype.setupAutoplay = function () {
+    if (!this.delay || DS.prefersReducedMotion()) return;
+    var self = this;
+
+    var pause = function () {
+      self.paused = true;
+      self.stopAuto();
+    };
+    var resume = function () {
+      self.paused = false;
+      self.startAuto();
+    };
+
+    this.panel.addEventListener("mouseenter", pause);
+    this.panel.addEventListener("mouseleave", resume);
+    this.root.addEventListener("focusin", function (e) {
+      if (e.target.matches && e.target.matches(":focus-visible")) pause();
+    });
+    this.root.addEventListener("focusout", function (e) {
+      if (!self.root.contains(e.relatedTarget)) resume();
+    });
+
+    document.addEventListener("visibilitychange", function () {
+      document.hidden ? self.stopAuto() : self.startAuto();
+    });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        function (entries) {
+          self.inView = entries[0].isIntersecting;
+          self.startAuto();
+        },
+        { threshold: 0.35 }
+      ).observe(this.root);
+    } else {
+      this.inView = true;
+      this.startAuto();
+    }
+
+    DS.onReducedMotionChange(function () {
+      if (DS.prefersReducedMotion()) {
+        self.delay = 0;
+        self.stopAuto();
+      }
+    });
+  };
+
+  Journey.prototype.stopAuto = function () {
+    window.clearInterval(this.auto);
+    this.auto = null;
+  };
+
+  Journey.prototype.startAuto = function () {
+    this.stopAuto();
+    if (!this.delay || this.paused || !this.inView || document.hidden) return;
+    var self = this;
+    this.auto = window.setInterval(function () {
+      self.select((self.index + 1) % self.tabs.length);
+    }, this.delay);
+  };
+
+  // On phones the tab row scrolls sideways: keep the active tab in view
+  // without scrolling the page itself.
+  Journey.prototype.revealTab = function (index) {
+    var bar = this.tablist;
+    var tab = this.tabs[index];
+    if (!bar || !tab || bar.scrollWidth <= bar.clientWidth) return;
+    var left = tab.offsetLeft - (bar.clientWidth - tab.offsetWidth) / 2;
+    bar.scrollTo({ left: left, behavior: DS.prefersReducedMotion() ? "auto" : "smooth" });
+  };
+
   Journey.prototype.select = function (index) {
     if (index === this.index) return;
     var self = this;
     this.index = index;
     this.applyState(index);
+    this.revealTab(index);
+    this.startAuto(); // a manual pick restarts the 2s countdown
 
     window.clearTimeout(this.timer);
     if (DS.prefersReducedMotion()) {

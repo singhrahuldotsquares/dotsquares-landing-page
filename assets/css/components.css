@@ -283,6 +283,7 @@ textarea.ds-field__control {
   select.ds-field__control,
   input.cta__input,
   textarea.cta__input,
+  select.cta__input,
   input.site-footer__input {
     font-size: 16px;
   }

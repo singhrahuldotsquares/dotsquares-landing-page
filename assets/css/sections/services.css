@@ -385,11 +385,28 @@
 
 /* Sit just outside the outermost card (never past the stage edge). */
 .services__nav--prev {
-  left: max(0px, calc(50% - var(--svc-reach) - 62px));
+  left: calc(50% - var(--svc-reach) - 62px);
 }
 
 .services__nav--next {
-  right: max(0px, calc(50% - var(--svc-reach) - 62px));
+  right: calc(50% - var(--svc-reach) - 62px);
+}
+
+/* Tablet: keep the arrows on screen; swipe + dots take over below 900px. */
+@media (max-width: 1099.98px) {
+  .services__nav--prev {
+    left: max(calc(8px - var(--ds-gutter)), calc(50% - var(--svc-reach) - 62px));
+  }
+
+  .services__nav--next {
+    right: max(calc(8px - var(--ds-gutter)), calc(50% - var(--svc-reach) - 62px));
+  }
+}
+
+@media (max-width: 899.98px) {
+  .services__nav {
+    display: none;
+  }
 }
 
 .services__nav:hover {
@@ -406,8 +423,9 @@
 /* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */
-/* Below 1400px the outer pair no longer fits: centre + immediate neighbours. */
-@media (max-width: 1399.98px) {
+/* Below 1600px there is no room outside the outer pair for the arrows:
+   centre + immediate neighbours, arrows just outside those. */
+@media (max-width: 1599.98px) {
   .services {
     --svc-reach: calc(var(--svc-step) + var(--svc-card-w) * 0.425);
   }

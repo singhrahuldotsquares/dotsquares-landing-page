@@ -24,9 +24,10 @@
 (function (DS) {
   "use strict";
 
-  // How long each step is held (ms), index = step.
-  var HOLD = [1300, 1500, 1500, 2300, 2600];
+  // How long each step is held (ms), index = step. The five holds plus the
+  // tile swap (SWITCH_MS) add up to 2000, so a new category starts every 2 s.
   var SWITCH_MS = 220;
+  var HOLD = [250, 300, 300, 350, 580];
 
   function colsFor(n) {
     if (n <= 3) return n;

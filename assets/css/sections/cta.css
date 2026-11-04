@@ -6,22 +6,25 @@
    ========================================================================== */
 
 .cta {
-  --cta-orange: #ca3400;
+  --cta-orange: #e8590c;
+  --cta-navy: #0e1e36;
+  --cta-ink-muted: #5d6882;
+  --cta-field: #f5f7fb;
+  --cta-line: #dde2ec;
 
   position: relative;
   overflow: hidden;
-  padding: 80px 0;
-  background: linear-gradient(135deg, #ff7a1a, #251106);
+  padding: 88px 0;
+  background: linear-gradient(135deg, #0e1e36 0%, #152a4d 100%);
   color: var(--ds-white);
 }
 
-/* Soft red glow behind the form, as on the live site. */
+/* One quiet orange glow behind the heading ties the navy to the brand. */
 .cta::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(at 80% 50%, #9c2400 0%, transparent 60%);
-  opacity: 0.25;
+  background: radial-gradient(60% 80% at 0% 100%, rgba(252, 110, 1, 0.28) 0%, transparent 65%);
   pointer-events: none;
 }
 
@@ -76,7 +79,7 @@
   height: 24px;
   margin-top: 2px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--cta-orange);
 }
 
 .cta__btn,
@@ -136,24 +139,25 @@
    -------------------------------------------------------------------------- */
 .cta__card {
   min-width: 0;
-  padding: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.12);
+  padding: 36px 32px 28px;
+  border-radius: 20px;
+  background: var(--ds-white);
+  color: var(--cta-navy);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.55);
 }
 
 .cta__card-title {
-  margin-bottom: 20px;
-  color: var(--ds-white);
+  margin-bottom: 8px;
+  color: var(--cta-navy);
   font-family: "Sora", var(--ds-font-sans);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 30px;
 }
 
 .cta__card-sub {
   margin-bottom: 24px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--cta-ink-muted);
   font-family: "Inter", var(--ds-font-sans);
   font-size: 14px;
   line-height: 21px;
@@ -169,10 +173,10 @@
   display: block;
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--cta-line);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--ds-white);
+  background: var(--cta-field);
+  color: var(--cta-navy);
   font-family: "Inter", var(--ds-font-sans);
   font-size: 14px;
   line-height: 21px;
@@ -187,28 +191,51 @@
   resize: none;
 }
 
+/* Service type dropdown: same look as the text fields, with our own chevron. */
+.cta__select {
+  height: 47px; /* matches the single-line inputs (12 + 21 + 12 + borders) */
+  padding-right: 44px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235d6882' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+/* The opened list is drawn by the browser on a light surface. */
+.cta__select option {
+  background: var(--ds-white);
+  color: var(--cta-navy);
+}
+
+/* Until a service is chosen, the select reads like a placeholder. */
+.cta__select:invalid {
+  color: var(--cta-ink-muted);
+}
+
 .cta__input::placeholder {
-  color: var(--ds-white);
+  color: var(--cta-ink-muted);
   opacity: 1;
 }
 
 .cta__input:hover {
-  border-color: rgba(255, 255, 255, 0.45);
+  border-color: #c3cad9;
 }
 
 .cta__input:focus {
-  border-color: var(--ds-white);
+  border-color: var(--cta-orange);
+  background: var(--ds-white);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(232, 89, 12, 0.18);
 }
 
 .cta__input.is-invalid {
-  border-color: #ffc9b0;
-  box-shadow: 0 0 0 1px #ffc9b0;
+  border-color: #d93025;
+  box-shadow: 0 0 0 1px #d93025;
 }
 
-/* Error text sits on the dark gradient, so it uses a light tint
-   instead of the default red. */
 .cta .ds-field__error,
 .cta .ds-form-status {
   font-family: "Inter", var(--ds-font-sans);
@@ -216,14 +243,29 @@
 
 .cta .ds-field__error {
   margin-top: 6px;
-  color: #ffe3d4;
+  color: #c5221f;
+  font-size: 13px;
   font-weight: 500;
 }
 
-.cta__submit {
+/* Primary action: the site's orange gradient, white text. */
+.cta__card .cta__submit {
   display: block;
   width: 100%;
   padding: 14px 0;
+  background: var(--ds-gradient);
+  color: var(--ds-white);
+  box-shadow: 0 12px 22px -12px rgba(232, 89, 12, 0.7);
+}
+
+.cta__card .cta__submit:not(:disabled):hover {
+  background: var(--ds-gradient);
+  color: var(--ds-white);
+  box-shadow: 0 16px 26px -12px rgba(232, 89, 12, 0.8);
+}
+
+.cta__card .cta__submit:focus-visible {
+  outline: 2px solid var(--cta-navy);
 }
 
 .cta__submit:disabled {
@@ -233,13 +275,11 @@
 
 .cta .ds-form-status {
   margin-top: 0;
-  background: rgba(0, 0, 0, 0.2);
-  color: var(--ds-white);
 }
 
 .cta__note {
   margin-top: 16px;
-  color: var(--ds-white);
+  color: var(--cta-ink-muted);
   font-family: "Inter", var(--ds-font-sans);
   font-size: 12px;
   line-height: 18px;

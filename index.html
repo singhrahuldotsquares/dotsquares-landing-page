@@ -890,7 +890,7 @@
     </section>
 
 
-    <section class="platform" id="platform" aria-labelledby="platform-title" data-platform data-autoplay="6500">
+    <section class="platform" id="platform" aria-labelledby="platform-title" data-platform data-autoplay="2000">
       <div class="ds-container">
         <p class="ds-eyebrow platform__eyebrow" data-reveal>
           <img src="assets/images/icons/hubspot-sprocket.svg" width="20" height="20" alt="">
@@ -1173,7 +1173,7 @@
     </section>
 
 
-    <section class="journey" id="journey" aria-labelledby="journey-title" data-journey data-active-stage="marketing">
+    <section class="journey" id="journey" aria-labelledby="journey-title" data-journey data-autoplay="2000" data-active-stage="marketing">
       <div class="ds-container">
         <p class="ds-eyebrow journey__eyebrow" data-reveal>
           <img src="assets/images/icons/hubspot-sprocket.svg" width="20" height="20" alt="">
@@ -2438,6 +2438,37 @@
                      data-msg-required="Please enter your phone number."
                      data-msg-invalid="Please enter a valid phone number (digits, spaces, + ( ) - only).">
               <span class="ds-field__error" id="cta-phone-error"></span>
+            </div>
+
+            <div class="ds-field">
+              <label class="visually-hidden" for="cta-org">Organisation Name</label>
+              <input class="cta__input" id="cta-org" name="organisation" type="text"
+                     placeholder="Organisation Name" autocomplete="organization" required minlength="2"
+                     aria-describedby="cta-org-error"
+                     data-msg-required="Please enter your organisation name."
+                     data-msg-invalid="Please enter a valid organisation name.">
+              <span class="ds-field__error" id="cta-org-error"></span>
+            </div>
+
+            <div class="ds-field">
+              <label class="visually-hidden" for="cta-service">Service Type</label>
+              <select class="cta__input cta__select" id="cta-service" name="serviceType" required
+                      aria-describedby="cta-service-error"
+                      data-msg-required="Please choose the service you are interested in.">
+                <option value="" selected disabled>Service Type</option>
+                <option>Setup &amp; Implementation</option>
+                <option>CRM Migration &amp; Data Sync</option>
+                <option>Marketing, Sales, Service &amp; Content Hubs</option>
+                <option>Revenue Hub &amp; RevOps</option>
+                <option>AI &amp; Automation</option>
+                <option>Integrations &amp; APIs</option>
+                <option>Custom Development</option>
+                <option>Website on HubSpot CMS</option>
+                <option>Training &amp; Onboarding</option>
+                <option>Audit, Optimisation &amp; Support</option>
+                <option>Not sure yet</option>
+              </select>
+              <span class="ds-field__error" id="cta-service-error"></span>
             </div>
 
             <div class="ds-field">
