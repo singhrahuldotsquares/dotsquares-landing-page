@@ -156,6 +156,15 @@
   margin-top: 20px;
   font-size: 16px;
   line-height: 26px;
+  /* Sits straight on the busy photo, so make it pure white and add a soft
+     dark halo so every line stays readable. */
+  color: #fff;
+  font-weight: 500;
+  text-wrap: pretty;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.85),
+    0 0 14px rgba(0, 0, 0, 0.75),
+    0 0 28px rgba(0, 0, 0, 0.55);
 }
 
 .hero__services {
@@ -173,6 +182,13 @@
   min-height: 48px;
   font-size: 16px;
   line-height: 22px;
+  /* Over the bright skyline/water: pure white, a touch heavier, soft halo. */
+  color: #fff;
+  font-weight: 500;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 0 12px rgba(0, 0, 0, 0.8),
+    0 0 24px rgba(0, 0, 0, 0.6);
 }
 
 .hero-service__icon {
@@ -269,6 +285,13 @@
   .hero__trust {
     margin-top: 0;
     padding-top: 66px;
+  }
+}
+
+/* Side-by-side layouts: sit the form a little lower than the heading. */
+@media (min-width: 992px) {
+  .hero__aside .lead-card {
+    margin-top: 100px;
   }
 }
 
@@ -553,6 +576,8 @@
    -------------------------------------------------------------------------- */
 .hero-faq {
   margin-top: 14px;
+  /* Hidden for now. Remove this line to bring the slider back. */
+  display: none;
 }
 
 .hero-faq__label {
