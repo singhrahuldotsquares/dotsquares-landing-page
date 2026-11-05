@@ -26,7 +26,7 @@
   object-fit: cover;
   object-position: 50% 0%;
   /* Lift the (very dark) photo a little. Lower = darker, higher = lighter. */
-  filter: brightness(1.2);
+  filter: brightness(1.08);
 }
 
 /* Legibility overlay — only used on stacked layouts (see < 992px). */
