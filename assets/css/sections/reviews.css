@@ -34,11 +34,44 @@
   margin-bottom: 24px;
 }
 
+.reviews__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  min-width: 0;
+}
+
 .reviews__title {
   color: #1f3a56;
   font-family: "Sora", var(--ds-font-sans);
   font-size: 24px;
   font-weight: 700;
+  line-height: 1.2;
+}
+
+.reviews__summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--reviews-ink);
+  font-family: "Inter", var(--ds-font-sans);
+}
+
+.reviews__avg {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.reviews__avg-stars {
+  display: flex;
+  color: var(--reviews-gold);
+}
+
+.reviews__count {
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1;
 }
 
@@ -181,22 +214,56 @@
   margin-top: 16px;
   color: var(--reviews-ink);
   font-family: "Inter", var(--ds-font-sans);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.4;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
-/* Each paragraph is clamped to 7 lines, as on the live site. */
+/* Review body is clamped to 6 lines so every card stays the same height. */
 .review__text {
   display: -webkit-box;
   margin-top: 16px;
   overflow: hidden;
   color: #344054;
   font-family: "Inter", var(--ds-font-sans);
-  font-size: 15px;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+/* "Services provided" box pinned to the bottom of each card */
+.review__services {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #fff5ee;
+}
+
+.review__services-label {
+  color: var(--reviews-gold);
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.review__services-list {
+  display: -webkit-box;
+  margin-top: 10px;
+  overflow: hidden;
+  color: #1d2939;
+  font-family: "Inter", var(--ds-font-sans);
+  font-size: 12px;
   line-height: 1.5;
-  -webkit-line-clamp: 7;
-  line-clamp: 7;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
@@ -271,6 +338,10 @@
   .reviews__head {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .reviews__title {
+    font-size: 22px;
   }
 }
 

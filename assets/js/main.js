@@ -20,4 +20,5 @@
   DS.initReviews();
   DS.initFaq();
   DS.initForms();
+  DS.initLeadModal();
 })(window.DS);

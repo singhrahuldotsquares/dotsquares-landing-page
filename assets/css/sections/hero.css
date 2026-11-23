@@ -1056,3 +1056,142 @@ backdrop-filter: blur(2px) saturate(1.1);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/* --------------------------------------------------------------------------
+   Contact popup (phones only). Above 768px the wrapper is invisible to layout
+   and the form stays in the hero as before.
+   -------------------------------------------------------------------------- */
+.lead-modal {
+  display: contents;
+}
+
+.lead-card__close,
+.lead-fab {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .lead-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: 78px 16px 28px;
+    background: rgba(4, 9, 22, 0.82);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+
+  .lead-modal.is-open {
+    display: block;
+    animation: lead-modal-in 0.25s ease-out;
+  }
+
+  .js .lead-modal .lead-card[data-reveal],
+  .lead-modal .lead-card {
+    order: 0;
+    margin: 0 auto;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .lead-card__close {
+    position: absolute;
+    top: -52px;
+    right: 0;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .lead-card__close:focus-visible {
+    outline: 2px solid #ff7900;
+    outline-offset: 2px;
+  }
+
+  html.lead-modal-open,
+  html.lead-modal-open body {
+    overflow: hidden;
+  }
+
+  /* The hero is an isolated stacking context, so the popup (z 1200) cannot rise
+     above the fixed site header (z 1030) and the header would cover the close
+     button and the top of the card. Hide the header while the popup is open. */
+  html.lead-modal-open .site-header {
+    visibility: hidden;
+  }
+
+  /* Floating "Contact us" button: compact, bottom right, clear of the safe area. */
+  .lead-fab {
+    position: fixed;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index: 1100;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #ff7a1a 0%, #f04e00 100%);
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    box-shadow: 0 8px 24px rgba(240, 78, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+
+  .lead-fab:active {
+    transform: scale(0.97);
+  }
+
+  html.lead-modal-open .lead-fab {
+    display: none;
+  }
+
+  /* Tighter vertical rhythm now that the form card is out of the flow. */
+  .hero__pill {
+    margin-top: 22px;
+  }
+
+  .hero__services {
+    margin-top: 24px;
+  }
+
+  .hero__trust {
+    padding-top: 24px;
+  }
+
+  .hero-faq {
+    margin-top: 28px;
+  }
+
+  .hero {
+    padding-bottom: 32px;
+  }
+}
+
+@keyframes lead-modal-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

@@ -41,8 +41,14 @@
     this.bind();
   }
 
+  // One position per "page" of cards; the last page is pulled back so it never
+  // shows an empty slot (the final index is slides - per).
   Reviews.prototype.positions = function () {
-    return Math.max(1, this.slides.length - this.per + 1);
+    return Math.max(1, Math.ceil(this.slides.length / this.per));
+  };
+
+  Reviews.prototype.startOf = function (page) {
+    return Math.min(page * this.per, Math.max(0, this.slides.length - this.per));
   };
 
   // Recompute cards-per-view and rebuild the dots when the breakpoint changes.
@@ -67,8 +73,8 @@
       var dot = document.createElement("button");
       dot.type = "button";
       dot.className = "reviews__dot";
-      var first = i + 1;
-      var last = Math.min(i + this.per, total);
+      var first = this.startOf(i) + 1;
+      var last = Math.min(first + this.per - 1, total);
       dot.setAttribute("aria-label", first === last
         ? "Show review " + first + " of " + total
         : "Show reviews " + first + " to " + last + " of " + total);
@@ -102,10 +108,11 @@
     var max = this.positions() - 1;
     this.index = Math.max(0, Math.min(i, max));
     var per = this.per;
-    var current = this.index;
+    var current = this.startOf(this.index);
     // Read the gap from CSS so breakpoint changes (32px / 16px) stay in sync.
     var gap = parseFloat(window.getComputedStyle(this.track).columnGap) || 0;
 
+    var self = this;
     this.track.style.transform = "translateX(calc(" + -current + " * ((100% - " +
       (per - 1) * gap + "px) / " + per + " + " + gap + "px)))";
 
@@ -115,7 +122,7 @@
       if ("inert" in slide) slide.inert = !visible;
     });
     this.dots.forEach(function (dot, n) {
-      var on = n === current;
+      var on = n === self.index;
       dot.classList.toggle("is-active", on);
       dot.setAttribute("aria-current", on ? "true" : "false");
     });
