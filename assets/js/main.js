@@ -2,6 +2,7 @@
 (function (DS) {
   "use strict";
 
+  DS.initRegion(); // before initFlag and initForms
   DS.initNav();
   DS.initReveal();
   DS.initFlag();

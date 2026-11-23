@@ -365,6 +365,21 @@
   right: 10px;
 }
 
+/* Touch: full 44px-wide tap target; the arrow stays where it was. */
+@media (max-width: 991.98px) {
+  .achv__nav {
+    width: 44px;
+  }
+
+  .achv__nav--prev {
+    left: 1px;
+  }
+
+  .achv__nav--next {
+    right: 1px;
+  }
+}
+
 .achv__nav:hover {
   color: #fff;
   opacity: 0.85;

@@ -231,6 +231,12 @@
   inset: -10px -3px;
 }
 
+@media (max-width: 991.98px) {
+  .reviews__dot::before {
+    inset: -17px -3px;
+  }
+}
+
 .reviews__dot:hover {
   background: rgba(0, 0, 0, 0.35);
 }

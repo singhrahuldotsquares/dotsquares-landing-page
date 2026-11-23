@@ -1,0 +1,78 @@
+/* ==========================================================================
+   UK / US region switching (see assets/js/region.js).
+   <html data-region="uk|us"> is set in <head> before first paint; anything
+   marked data-only="uk" or data-only="us" shows for that region only.
+   ========================================================================== */
+
+html:not([data-region="us"]) [data-only="us"],
+html[data-region="us"] [data-only="uk"] {
+  display: none !important;
+}
+
+/* Compact UK | US switch in the header, styled like the phone pill. */
+.region-switch {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid rgba(252, 110, 1, 0.35);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.region-switch__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--ds-black);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.region-switch__btn img {
+  display: block;
+  width: 21px;
+  height: 14px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.region-switch__btn:hover {
+  background: #fff4ea;
+}
+
+.region-switch__btn[aria-pressed="true"] {
+  background: var(--ds-orange);
+  color: #fff;
+}
+
+.region-switch__btn:focus-visible {
+  outline: 2px solid var(--ds-orange);
+  outline-offset: 2px;
+}
+
+/* Laptop widths: the header row has room for the switch only if it drops its
+   flags (the active button already shows the region) and the phone pill drops
+   its flag too. */
+@media (min-width: 992px) and (max-width: 1399.98px) {
+  .region-switch__btn img,
+  a.site-nav__region > img {
+    display: none;
+  }
+
+  .region-switch__btn {
+    padding: 6px 8px;
+  }
+
+  .site-nav__links {
+    gap: 24px;
+  }
+}

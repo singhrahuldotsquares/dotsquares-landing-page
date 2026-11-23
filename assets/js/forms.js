@@ -184,16 +184,25 @@
   }
 
   // Country-code picker: a native <select> sits invisibly over the visual box.
-  // Only the Australian flag exists as an asset, so other codes show as text.
+  // Codes with a flag asset show the flag; any other code shows as text.
+  var FLAGS = {
+    "+44": "assets/images/brand/flag-uk.png",
+    "+61": "assets/images/brand/flag-au.png",
+    "+1": "assets/images/brand/flag-us.png"
+  };
+
   function initPhoneCountry(select) {
     var box = select.parentNode;
     var flag = DS.qs("[data-phone-cc-flag]", box);
     var code = DS.qs("[data-phone-cc-code]", box);
     var update = function () {
-      var isAu = select.value === "+61";
-      if (flag) flag.hidden = !isAu;
+      var src = FLAGS[select.value];
+      if (flag) {
+        flag.hidden = !src;
+        if (src && flag.getAttribute("src") !== src) flag.setAttribute("src", src);
+      }
       if (code) {
-        code.hidden = isAu;
+        code.hidden = !!src;
         code.textContent = select.value;
       }
     };

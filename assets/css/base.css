@@ -44,6 +44,14 @@ ul {
   padding-inline: var(--ds-gutter);
 }
 
+/* Landscape iPhones: keep content clear of the notch / rounded corners. */
+@supports (padding: max(0px)) {
+  .ds-container {
+    padding-left: max(var(--ds-gutter), env(safe-area-inset-left));
+    padding-right: max(var(--ds-gutter), env(safe-area-inset-right));
+  }
+}
+
 /* Focus: visible on every interactive element, keyboard only. */
 :focus-visible {
   outline: 2px solid var(--ds-orange);

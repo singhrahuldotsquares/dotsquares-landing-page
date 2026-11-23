@@ -71,7 +71,7 @@
       features: [
         ["Deal pipelines with stage-based", "automation and task creation"],
         ["Sequences, meeting links,", "call recording and email tracking"],
-        ["Breeze Intelligence enriches", "the record and flags buyer intent"],
+        ["AI enrichment completes", "records and flags buyer intent"],
         ["Quote builder pulling live", "product and pricing data"],
         ["Forecasting, quota tracking", "and rep-level activity reporting"]
       ],
@@ -113,7 +113,7 @@
       features: [
         ["Onboarding checklists and a", "self-serve customer portal"],
         ["Help desk with tickets,", "queues, routing and SLAs"],
-        ["Knowledge base plus Breeze", "Customer Agent for tier-one answers"],
+        ["Knowledge base plus the AI", "Customer Agent for tier-one answers"],
         ["CSAT, NPS and", "support-volume reporting"],
         ["Churn and health signals", "surfaced on the company record"]
       ],
@@ -130,7 +130,7 @@
       stage: "Foundation layer",
       icon: IMG + "tab-data.svg",
       map: "data",
-      desc: "Not a stage - the plumbing under all five. Formerly Data Hub. If this layer is messy, every stage above it is guessing.",
+      desc: "Not a stage - the plumbing under all five. Formerly Operations Hub. If this layer is messy, every stage above it is guessing.",
       features: [
         ["Two-way sync with the", "tools you already run"],
         ["Deduplication and automated", "data-quality rules"],
@@ -146,16 +146,16 @@
     },
     {
       key: "breeze",
-      label: "Breeze AI",
-      title: "Breeze AI",
+      label: "HubSpot AI",
+      title: "HubSpot AI & Agent Hub",
       stage: "Foundation layer",
       icon: IMG + "tab-breeze.svg",
       map: "hub",
       desc: "Not a stage either - HubSpot's AI layer woven through every Hub, reading from the same Smart CRM.",
       features: [
-        ["Breeze agents for prospecting,", "content and customer support"],
-        ["Breeze Intelligence for", "enrichment and buyer intent"],
-        ["Copilot available", "inside every Hub"],
+        ["AI agents for prospecting,", "content, data and customer support"],
+        ["Agent Builder to customise", "agents or create your own"],
+        ["Breeze Assistant available", "inside every Hub"],
         ["Drafting, summarising and", "next-step suggestions in context"],
         ["Only ever as good as the", "data layer beneath it"]
       ],

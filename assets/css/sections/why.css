@@ -291,3 +291,66 @@
     padding-bottom: 40px;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Delivery approach (five steps) — reuses the section's type scale and the
+   brand orange accent; no new colours.
+   -------------------------------------------------------------------------- */
+.why-approach {
+  margin-top: 64px;
+  padding: 0 3px 0 2px;
+}
+
+.why-approach__title {
+  color: var(--ds-black);
+  font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.why-approach__steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 20px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.why-approach__step {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 18px;
+  border-top: 3px solid var(--ds-orange);
+  border-radius: 0 0 14px 14px;
+  background: #f7f8fa;
+  color: #333;
+  font-size: 15px;
+  line-height: 21px;
+}
+
+.why-approach__num {
+  color: var(--ds-orange);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.why-approach__step strong {
+  color: var(--ds-black);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+@media (max-width: 991.98px) {
+  .why-approach__steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .why-approach__steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

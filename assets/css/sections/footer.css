@@ -398,21 +398,45 @@
     gap: 20px 24px;
   }
 
-  /* Touch screens: give the small text links a 24px+ tap height. */
+  /* Touch screens: every link, button and field gets a ~44px tap target. */
   .site-footer__link,
-  .site-footer__text,
   .site-footer__office-phone,
   .site-footer__legal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .site-footer__text {
     display: inline-block;
     padding-block: 4px;
   }
 
   .site-footer__links li + li {
-    margin-top: 2px;
+    margin-top: 0;
   }
 
   .site-footer__office-phone {
-    margin-top: 2px;
+    margin-top: 0;
+  }
+
+  .site-footer__input,
+  .site-footer__subscribe-btn {
+    height: 48px;
+    min-height: 48px;
+  }
+
+  .site-footer__social {
+    gap: 8px;
+  }
+
+  .site-footer__social-link {
+    width: 44px;
+    height: 44px;
+  }
+
+  .site-footer__legal {
+    gap: 0 20px;
   }
 }
 
@@ -432,7 +456,7 @@
   }
 
   .site-footer__legal {
-    gap: 4px 16px;
+    gap: 0 20px;
   }
 }
 
@@ -442,7 +466,8 @@
 @media (max-width: 767.98px) {
   .site-footer {
     padding-top: 40px;
-    padding-bottom: 40px;
+    /* Home-indicator clearance on notched iPhones. */
+    padding-bottom: max(40px, calc(24px + env(safe-area-inset-bottom)));
   }
 
   .site-footer__grid {

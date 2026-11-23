@@ -191,6 +191,35 @@
   resize: none;
 }
 
+/* Phone: the shared country-code box (see hero.css) beside the number, dressed
+   to match the CTA fields. */
+.cta__phone {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.cta__phone .phone-cc {
+  flex: 0 0 76px;
+  height: 47px;
+  border-color: var(--cta-line);
+  border-radius: 12px;
+  background: var(--cta-field);
+}
+
+.cta__phone .phone-cc__display {
+  padding-left: 12px;
+}
+
+.cta__phone .phone-cc:hover {
+  border-color: #c3cad9;
+}
+
+.cta__phone .phone-cc:focus-within {
+  border-color: var(--cta-orange);
+  box-shadow: 0 0 0 3px rgba(232, 89, 12, 0.18);
+}
+
 /* Service type dropdown: same look as the text fields, with our own chevron. */
 .cta__select {
   height: 47px; /* matches the single-line inputs (12 + 21 + 12 + borders) */

@@ -564,3 +564,8 @@
 .solution__cta {
   box-shadow: none;
 }
+
+/* Hero pill links jump to these cards; keep them clear of the sticky header. */
+.solution[id] {
+  scroll-margin-top: 110px;
+}

@@ -296,8 +296,20 @@ a.site-nav__region:focus-visible {
     height: 28px;
   }
 
+  /* 44px-high tap area around the logo link (the image itself stays 28px). */
+  .site-nav__brand {
+    align-items: center;
+    min-height: 44px;
+  }
+
   .site-nav__menu {
     flex-basis: 100%;
+    /* On short screens (landscape phones) the open panel scrolls itself rather
+       than running off the bottom of the fixed header. */
+    max-height: calc(100vh - var(--ds-header-top) - var(--ds-header-height) - 24px);
+    max-height: calc(100dvh - var(--ds-header-top) - var(--ds-header-height) - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .site-nav__links {
@@ -312,6 +324,16 @@ a.site-nav__region:focus-visible {
   .site-nav__link {
     display: block;
     padding: 12px 4px;
+    min-height: 44px;
+  }
+
+  .region-switch__btn {
+    min-height: 40px;
+    padding-inline: 12px;
+  }
+
+  a.site-nav__region {
+    height: 46px;
   }
 
   .site-nav__link::after {
