@@ -267,6 +267,44 @@
   -webkit-box-orient: vertical;
 }
 
+/* Prev / next arrows, vertically centred on the cards (dots row is ~30px). */
+.reviews__carousel {
+  position: relative;
+}
+
+.reviews__arrow {
+  position: absolute;
+  top: calc((100% - 30px) / 2);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--reviews-line);
+  border-radius: 50%;
+  background: var(--ds-white);
+  color: var(--reviews-ink);
+  box-shadow: 0 4px 14px rgba(16, 24, 40, 0.14);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reviews__arrow--prev { left: -22px; }
+.reviews__arrow--next { right: -22px; }
+
+.reviews__arrow:hover {
+  color: #fd7400;
+  box-shadow: 0 6px 20px rgba(16, 24, 40, 0.22);
+}
+
+.reviews__arrow:focus-visible {
+  outline: 2px solid #fd7400;
+  outline-offset: 2px;
+}
+
 /* Pagination dots */
 .reviews__dots {
   display: flex;
@@ -345,10 +383,23 @@
   }
 }
 
+@media (max-width: 1100px) {
+  .reviews__arrow--prev { left: -12px; }
+  .reviews__arrow--next { right: -12px; }
+}
+
 @media (max-width: 639.98px) {
   .reviews {
     --reviews-gap: 16px;
   }
+
+  .reviews__arrow {
+    width: 38px;
+    height: 38px;
+  }
+
+  .reviews__arrow--prev { left: -8px; }
+  .reviews__arrow--next { right: -8px; }
 
   .review__head {
     flex-wrap: wrap;

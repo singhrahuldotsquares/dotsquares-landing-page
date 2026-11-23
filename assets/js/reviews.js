@@ -5,15 +5,22 @@
  * read from CSS. One dot per
  * reachable position, so 8 reviews give 6 / 7 / 8 dots.
  *
+ * Prev/next arrows loop around; the carousel also advances by itself every
+ * 5 seconds (paused on hover/focus/touch, when the tab or section is not
+ * visible, and disabled for prefers-reduced-motion).
+ *
  * Markup hooks:
  *   [data-reviews]          root; optional data-reviews-start="index"
  *   [data-reviews-track]    flex track
  *   [data-reviews-slide]    each review
  *   [data-reviews-dots]     empty container for the dot buttons
+ *   [data-reviews-prev|next] arrow buttons
  *   [data-reviews-status]   visually hidden live region
  */
 (function (DS) {
   "use strict";
+
+  var AUTOPLAY_MS = 5000;
 
   var QUERIES = [
     { mq: window.matchMedia("(min-width: 1024px)"), per: 3 },
@@ -33,6 +40,11 @@
     this.slides = DS.qsa("[data-reviews-slide]", root);
     this.dotsEl = DS.qs("[data-reviews-dots]", root);
     this.status = DS.qs("[data-reviews-status]", root);
+    this.prev = DS.qs("[data-reviews-prev]", root);
+    this.next = DS.qs("[data-reviews-next]", root);
+    this.timer = null;
+    this.paused = false;
+    this.inView = true;
     this.per = 0;
     this.index = parseInt(root.getAttribute("data-reviews-start"), 10) || 0;
     if (!this.track || !this.slides.length) return;
@@ -135,8 +147,53 @@
     }
   };
 
+  // Step by one page, wrapping at both ends.
+  Reviews.prototype.step = function (dir, announce) {
+    var n = this.positions();
+    this.go((this.index + dir + n) % n, announce);
+  };
+
+  Reviews.prototype.play = function () {
+    var self = this;
+    this.stop();
+    if (this.paused || !this.inView || document.hidden) return;
+    if (this.positions() < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    this.timer = window.setInterval(function () { self.step(1, false); }, AUTOPLAY_MS);
+  };
+
+  Reviews.prototype.stop = function () {
+    if (this.timer) window.clearInterval(this.timer);
+    this.timer = null;
+  };
+
   Reviews.prototype.bind = function () {
     var self = this;
+
+    // Arrows (manual navigation restarts the 5s timer).
+    if (this.prev) this.prev.addEventListener("click", function () { self.step(-1, true); self.play(); });
+    if (this.next) this.next.addEventListener("click", function () { self.step(1, true); self.play(); });
+    this.dotsEl.addEventListener("click", function () { self.play(); });
+
+    // Autoplay pauses while the user is interacting or the section is off screen.
+    var pause = function () { self.paused = true; self.stop(); };
+    var resume = function () { self.paused = false; self.play(); };
+    this.root.addEventListener("mouseenter", pause);
+    this.root.addEventListener("mouseleave", resume);
+    this.root.addEventListener("focusin", pause);
+    this.root.addEventListener("focusout", resume);
+    this.root.addEventListener("touchstart", pause, { passive: true });
+    this.root.addEventListener("touchend", function () {
+      window.setTimeout(resume, 3000);
+    }, { passive: true });
+    document.addEventListener("visibilitychange", function () { self.play(); });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        self.inView = entries[0].isIntersecting;
+        self.play();
+      }, { threshold: 0.2 }).observe(this.root);
+    }
+
     QUERIES.forEach(function (q) {
       var onChange = function () { self.layout(); };
       if (q.mq.addEventListener) q.mq.addEventListener("change", onChange);
@@ -156,6 +213,8 @@
       if (Math.abs(dx) > 40) self.go(self.index + (dx < 0 ? 1 : -1), true);
     });
     viewport.addEventListener("pointercancel", function () { startX = null; });
+
+    this.play();
   };
 
   DS.initReviews = function () {
