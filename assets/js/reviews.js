@@ -1,13 +1,13 @@
 /*
- * "What Our Clients Say" — multi-card carousel driven by pagination dots,
- * matching the live reference (no arrows, no autoplay, 0.5s slide).
+ * Client reviews carousel: arrows + pagination dots, 0.5s slide.
  * Cards per view: 3 (>= 1024px), 2 (>= 640px), 1 (phones); the card gap is
- * read from CSS. One dot per
- * reachable position, so 8 reviews give 6 / 7 / 8 dots.
+ * read from CSS. One dot per page of cards.
  *
- * Prev/next arrows loop around; the carousel also advances by itself every
- * 5 seconds (paused on hover/focus/touch, when the tab or section is not
- * visible, and disabled for prefers-reduced-motion).
+ * It loops endlessly: after the last page it keeps sliding in the same
+ * direction onto cloned first-page cards, then silently snaps back (and the
+ * same in reverse for "previous" on the first page). It also advances by
+ * itself every 5 seconds (paused on hover/focus/touch, when the tab or section
+ * is not visible, and disabled for prefers-reduced-motion).
  *
  * Markup hooks:
  *   [data-reviews]          root; optional data-reviews-start="index"
@@ -43,6 +43,8 @@
     this.prev = DS.qs("[data-reviews-prev]", root);
     this.next = DS.qs("[data-reviews-next]", root);
     this.timer = null;
+    this.snapTimer = null;
+    this.clones = [];
     this.paused = false;
     this.inView = true;
     this.per = 0;
@@ -67,13 +69,56 @@
   Reviews.prototype.layout = function () {
     var per = perView();
     if (per === this.per) {
-      this.go(this.index, false); // gap may have changed at the 640px breakpoint
+      this.go(this.index, false, false); // gap may have changed at the 640px breakpoint
       return;
     }
     this.per = per;
     this.root.style.setProperty("--reviews-per", per);
+    this.buildClones();
     this.buildDots();
-    this.go(Math.min(this.index, this.positions() - 1), false);
+    this.go(Math.min(this.index, this.positions() - 1), false, false);
+  };
+
+  // Endless loop: the first `per` slides are cloned after the last one. Going
+  // forward from the last page slides onto the clones (they look identical to
+  // the first page), then the track silently snaps back to the real first page.
+  Reviews.prototype.buildClones = function () {
+    var track = this.track;
+    this.clones.forEach(function (c) { track.removeChild(c); });
+    this.clones = [];
+    for (var i = 0; i < this.per && i < this.slides.length; i++) {
+      var clone = this.slides[i].cloneNode(true);
+      clone.removeAttribute("data-reviews-slide");
+      clone.setAttribute("aria-hidden", "true");
+      clone.setAttribute("data-reviews-clone", "");
+      if ("inert" in clone) clone.inert = true;
+      DS.qsa("[id]", clone).forEach(function (el) { el.removeAttribute("id"); });
+      DS.qsa("[aria-labelledby]", clone).forEach(function (el) { el.removeAttribute("aria-labelledby"); });
+      track.appendChild(clone);
+      this.clones.push(clone);
+    }
+  };
+
+  // Move the track to a slide offset; animate=false jumps without a transition.
+  Reviews.prototype.place = function (pos, animate) {
+    var per = this.per;
+    // Read the gap from CSS so breakpoint changes (32px / 16px) stay in sync.
+    var gap = parseFloat(window.getComputedStyle(this.track).columnGap) || 0;
+    if (!animate) this.track.style.transition = "none";
+    this.track.style.transform = "translateX(calc(" + -pos + " * ((100% - " +
+      (per - 1) * gap + "px) / " + per + " + " + gap + "px)))";
+    if (!animate) {
+      void this.track.offsetWidth; // commit the jump before transitions return
+      this.track.style.transition = "";
+    }
+  };
+
+  // Finish a pending wrap-around instantly (clone position -> real first page).
+  Reviews.prototype.flush = function () {
+    if (!this.snapTimer) return;
+    window.clearTimeout(this.snapTimer);
+    this.snapTimer = null;
+    this.place(this.startOf(this.index), false);
   };
 
   Reviews.prototype.buildDots = function () {
@@ -116,17 +161,13 @@
     this.dots[next].focus();
   };
 
-  Reviews.prototype.go = function (i, announce) {
+  // Update dots / aria / live region for page i (does not move the track).
+  Reviews.prototype.setState = function (i, announce) {
     var max = this.positions() - 1;
     this.index = Math.max(0, Math.min(i, max));
     var per = this.per;
     var current = this.startOf(this.index);
-    // Read the gap from CSS so breakpoint changes (32px / 16px) stay in sync.
-    var gap = parseFloat(window.getComputedStyle(this.track).columnGap) || 0;
-
     var self = this;
-    this.track.style.transform = "translateX(calc(" + -current + " * ((100% - " +
-      (per - 1) * gap + "px) / " + per + " + " + gap + "px)))";
 
     this.slides.forEach(function (slide, n) {
       var visible = n >= current && n < current + per;
@@ -147,10 +188,35 @@
     }
   };
 
-  // Step by one page, wrapping at both ends.
+  Reviews.prototype.go = function (i, announce, animate) {
+    this.flush();
+    this.setState(i, announce);
+    this.place(this.startOf(this.index), animate !== false);
+  };
+
+  // Step by one page. Wrapping is seamless: it keeps sliding in the same
+  // direction instead of rewinding the whole track.
   Reviews.prototype.step = function (dir, announce) {
+    var self = this;
     var n = this.positions();
-    this.go((this.index + dir + n) % n, announce);
+    if (n < 2) return;
+    this.flush();
+    var last = n - 1;
+
+    if (dir > 0 && this.index === last) {
+      this.setState(0, announce);
+      this.place(this.slides.length, true); // slide onto the cloned first page
+      this.snapTimer = window.setTimeout(function () {
+        self.snapTimer = null;
+        self.place(self.startOf(self.index), false);
+      }, 560);
+    } else if (dir < 0 && this.index === 0) {
+      this.place(this.slides.length, false); // same picture as page 1, off the end
+      this.setState(last, announce);
+      this.place(this.startOf(last), true);
+    } else {
+      this.go(this.index + dir, announce);
+    }
   };
 
   Reviews.prototype.play = function () {
@@ -210,7 +276,7 @@
       if (startX === null) return;
       var dx = event.clientX - startX;
       startX = null;
-      if (Math.abs(dx) > 40) self.go(self.index + (dx < 0 ? 1 : -1), true);
+      if (Math.abs(dx) > 40) { self.step(dx < 0 ? 1 : -1, true); self.play(); }
     });
     viewport.addEventListener("pointercancel", function () { startX = null; });
 
